@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Fix Fast Buddy</string>
+
+    <string name="enter_mobile_number">
+    Enter your mobile number. We\'ll text you a verification code
+    </string>
+
+    <string name="enter_otp">
+    Please enter the 4-Digit code provided via sms or call to
+    </string>
+
+
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F72AF</color>
+    <color name="colorPrimaryDark">#38659c</color>
+    <color name="colorAccent">#DBE2EF</color>
+
+    <color name="pallete_1">#F9F7F7</color>
+    <color name="pallete_2">#DBE2EF</color>
+    <color name="pallete_3">#3F72AF</color>
+    <color name="pallete_4">#112D4E</color>
+
+
+    <color name="editText">#72777A</color>
+
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="next">#112D4E</color>
+    <color name="red">#FF2400</color>
+    <color name="gold">#EDBC10</color>
+</resources>
