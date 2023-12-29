@@ -1,10 +1,12 @@
 package com.wasfan.fixfastbuddy
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.Spinner
 import android.widget.Toast
 
@@ -15,6 +17,7 @@ class SignUpVehicle : AppCompatActivity() {
     private lateinit var yearSpinner: Spinner
     private lateinit var typeSpinner: Spinner
     private lateinit var insuranceCarrierSpinner: Spinner
+    private lateinit var doneBtn : Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +29,11 @@ class SignUpVehicle : AppCompatActivity() {
         yearSpinner = findViewById((R.id.yearSpinner))
         typeSpinner = findViewById(R.id.typeSpinner)
         insuranceCarrierSpinner = findViewById((R.id.insuranceCarrierSpinner))
+        doneBtn = findViewById(R.id.signupDoneBtn)
+
+        doneBtn.setOnClickListener {
+            startActivity((Intent(this, Navigation::class.java)))
+        }
 
 
         //MAKE SPINNER
