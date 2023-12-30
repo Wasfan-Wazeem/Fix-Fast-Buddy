@@ -18,10 +18,7 @@
         tools:targetApi="31">
         <activity
             android:name=".Navigation"
-            android:exported="false" />
-        <activity
-            android:name=".Home"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".SignUpVehicle"
             android:exported="false" />
