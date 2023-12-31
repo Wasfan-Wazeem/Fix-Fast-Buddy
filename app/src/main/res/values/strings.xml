@@ -9,6 +9,11 @@
     Please enter the 4-Digit code provided via sms or call to
     </string>
 
+    <string name="address">123-131 Philip Gunawardena Mawatha, Colombo 00400</string>
+    <string name="date">2023-10-21</string>
+    <string name="time">17:23:29</string>
+    <string name="service_id_text">Service ID : </string>
+    <string name="status_text">Status : </string>
 
 
 </resources>

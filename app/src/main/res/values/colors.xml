@@ -13,10 +13,12 @@
     <color name="editText">#72777A</color>
     <color name="menu">#D3D1D8</color>
 
+    <color name="location_circle">#0038FF</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="next">#112D4E</color>
     <color name="red">#FF2400</color>
     <color name="gold">#EDBC10</color>
+    <color name="lightgreen">#05BE70</color>
 </resources>

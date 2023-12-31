@@ -20,8 +20,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/bottom_menu"
         android:background="@drawable/navbar_background"
-        app:itemIconTint="@color/menu"
-        app:itemTextColor="@color/menu"
+        app:itemIconTint="@color/white"
+        app:itemTextColor="@color/white"
         app:itemIconSize="35dp"
         app:itemActiveIndicatorStyle="@style/App.Custom.Indicator" />
 

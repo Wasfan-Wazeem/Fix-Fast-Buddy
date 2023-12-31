@@ -83,6 +83,7 @@ class Phone : AppCompatActivity() {
 
     private fun sendToMain(){
         startActivity((Intent(this, MainActivity::class.java)))
+        finish()
     }
 
     private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {

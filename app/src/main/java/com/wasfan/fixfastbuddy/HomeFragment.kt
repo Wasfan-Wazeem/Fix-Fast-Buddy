@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -20,6 +22,10 @@ class HomeFragment : Fragment() {
     private lateinit var imageList : ArrayList<Int>
     private lateinit var adapter: VehicleImageAdapter
 
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var helplineList : ArrayList<Helpline>
+    private lateinit var helplineAdapter : HelplineAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,7 +34,6 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         init(view)
-
         setUpTransformer()
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
@@ -89,6 +94,19 @@ class HomeFragment : Fragment() {
         viewPager2.clipChildren = false
         viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
+        //Helpline
+        recyclerView = view.findViewById(R.id.helplineRecyclerViev)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext() , RecyclerView.HORIZONTAL , false)
+        helplineList = ArrayList()
+
+        helplineList.add(Helpline(R.drawable.hospital, "Hospital"))
+        helplineList.add(Helpline(R.drawable.police, "Police"))
+        helplineList.add(Helpline(R.drawable.fire_service, "Fire Service"))
+        helplineList.add(Helpline(R.drawable.insurance, "Insurance"))
+
+        helplineAdapter = HelplineAdapter(helplineList)
+        recyclerView.adapter = helplineAdapter
     }
 
 }
