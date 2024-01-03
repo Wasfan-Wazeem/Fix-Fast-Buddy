@@ -1,5 +1,6 @@
 package com.wasfan.fixfastbuddy
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -20,11 +21,16 @@ class HomeFragment : Fragment() {
     private lateinit var viewPager2: ViewPager2
     private lateinit var handler: Handler
     private lateinit var imageList : ArrayList<Int>
+    private lateinit var vehicleList : ArrayList<String>
     private lateinit var adapter: VehicleImageAdapter
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var helplineList : ArrayList<Helpline>
     private lateinit var helplineAdapter : HelplineAdapter
+
+    private lateinit var servicesRecyclerView: RecyclerView
+    private lateinit var servicesList : ArrayList<ServicesDataClass>
+    private lateinit var servicesAdapter : ServicesAdapterClass
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,6 +41,7 @@ class HomeFragment : Fragment() {
 
         init(view)
         setUpTransformer()
+        viewPager2.setCurrentItem(1, false)
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
@@ -81,12 +88,23 @@ class HomeFragment : Fragment() {
         viewPager2 = view.findViewById(R.id.vehicleViewPager)
         handler = Handler(Looper.myLooper()!!)
         imageList = ArrayList()
+        vehicleList = ArrayList()
 
         imageList.add(R.drawable.jeep)
         imageList.add(R.drawable.bmw)
         imageList.add(R.drawable.add_vehicle)
 
-        adapter = VehicleImageAdapter(imageList, viewPager2)
+        vehicleList.add("Jeep Wrangler 2019")
+        vehicleList.add("BMW 318i 2022")
+        vehicleList.add("Add Vehicle")
+
+        adapter = VehicleImageAdapter(requireContext(), imageList, vehicleList)
+        adapter.setOnItemClickListener { position ->
+            val intent = Intent(context, VehicleInfo::class.java)
+            intent.putExtra("vehicleName", vehicleList[position])
+            intent.putExtra("image", imageList[position])
+            startActivity(intent)
+        }
 
         viewPager2.adapter = adapter
         viewPager2.offscreenPageLimit = 3
@@ -107,6 +125,29 @@ class HomeFragment : Fragment() {
 
         helplineAdapter = HelplineAdapter(helplineList)
         recyclerView.adapter = helplineAdapter
+
+        //Services
+        servicesRecyclerView = view.findViewById(R.id.servicesRecyclerView)
+        recyclerView.setHasFixedSize(true)
+        servicesList = ArrayList()
+
+        servicesList.add(ServicesDataClass(R.drawable.services_tyre, "Tyre"))
+        servicesList.add(ServicesDataClass(R.drawable.services_engine, "Engine"))
+        servicesList.add(ServicesDataClass(R.drawable.services_tow_truck, "Tow Truck"))
+        servicesList.add(ServicesDataClass(R.drawable.services_battery, "Battery"))
+        servicesList.add(ServicesDataClass(R.drawable.services_lockout, "Lockout"))
+        servicesList.add(ServicesDataClass(R.drawable.services_fuel_delivery, "Fuel Delivery"))
+        servicesList.add(ServicesDataClass(R.drawable.services_tyre, "Tyre"))
+        servicesList.add(ServicesDataClass(R.drawable.services_engine, "Engine"))
+        servicesList.add(ServicesDataClass(R.drawable.services_tow_truck, "Tow Truck"))
+        servicesList.add(ServicesDataClass(R.drawable.services_battery, "Battery"))
+        servicesList.add(ServicesDataClass(R.drawable.services_lockout, "Lockout"))
+        servicesList.add(ServicesDataClass(R.drawable.services_fuel_delivery, "Fuel Delivery"))
+
+        servicesRecyclerView.layoutManager = GridLayoutManager(requireContext() , 2, RecyclerView.HORIZONTAL , false)
+        servicesAdapter = ServicesAdapterClass(servicesList)
+        servicesRecyclerView.adapter = servicesAdapter
+
     }
 
 }

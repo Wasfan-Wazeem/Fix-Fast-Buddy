@@ -68,39 +68,38 @@
 
     <EditText
         android:id="@+id/otpNumber1"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="23dp"
         android:background="@drawable/otp_input_box"
+
         android:ems="10"
         android:hint="-"
-
         android:inputType="number"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/otpNumber2"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/otpNumber" />
 
     <EditText
         android:id="@+id/otpNumber2"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="23dp"
         android:background="@drawable/otp_input_box"
         android:ems="10"
-        android:hint="-"
 
+        android:hint="-"
         android:inputType="number"
         android:textAlignment="center"
         android:textSize="20sp"
@@ -111,18 +110,18 @@
 
     <EditText
         android:id="@+id/otpNumber3"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="23dp"
         android:background="@drawable/otp_input_box"
         android:ems="10"
+
         android:hint="-"
         android:inputType="number"
-
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/otpNumber4"
@@ -132,13 +131,53 @@
 
     <EditText
         android:id="@+id/otpNumber4"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/otp_input_box"
+        android:ems="10"
+        android:hint="-"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/otpNumber5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/otpNumber3"
+        app:layout_constraintTop_toBottomOf="@+id/otpNumber" />
+
+    <EditText
+        android:id="@+id/otpNumber5"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/otp_input_box"
+        android:ems="10"
+        android:hint="-"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@+id/otpNumber6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/otpNumber4"
+        app:layout_constraintTop_toBottomOf="@+id/otpNumber" />
+
+    <EditText
+        android:id="@+id/otpNumber6"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="23dp"
         android:background="@drawable/otp_input_box"
         android:ems="10"
         android:hint="-"
@@ -147,7 +186,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/otpNumber3"
+        app:layout_constraintStart_toEndOf="@+id/otpNumber5"
         app:layout_constraintTop_toBottomOf="@+id/otpNumber" />
 
     <TextView

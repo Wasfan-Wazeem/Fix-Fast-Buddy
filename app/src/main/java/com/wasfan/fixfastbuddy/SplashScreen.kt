@@ -13,7 +13,7 @@ class SplashScreen : AppCompatActivity() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             // Start the main activity
-            startActivity(Intent(this, SignUpProfile::class.java))
+            startActivity(Intent(this, Phone::class.java))
             finish()  // Close the splash activity
         }, 3000)
     }

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="264dp"
+    android:layout_height="44dp"
+    android:orientation="horizontal"
+    android:background="@drawable/vehicle_info_spinner_bg">
+
+    <TextView
+        android:id="@+id/customSpinnerText1"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="@color/pallete_4"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Make"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/customSpinnerText2"
+        android:layout_width="76dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="@color/pallete_4"
+        android:textAlignment="textEnd"
+        android:textSize="16sp"
+        android:text="BMW"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_down"
+        android:layout_gravity="center"
+        android:layout_marginStart="16dp"
+        />
+
+</LinearLayout>

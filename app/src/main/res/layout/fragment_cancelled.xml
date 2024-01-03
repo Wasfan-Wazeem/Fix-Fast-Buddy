@@ -7,11 +7,10 @@
     android:background="#F0F0F0">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cancelledRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Cancelled Fragment"
-        android:gravity="center"
-        android:textSize="30sp"/>
+        android:paddingTop="10dp"/>
 
 </FrameLayout>

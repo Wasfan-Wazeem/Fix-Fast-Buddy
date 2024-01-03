@@ -18,7 +18,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/poppins_medium"
-            android:text="Hello Jarold"
+            android:text="Hello Ajith"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -68,28 +68,54 @@
             android:text="Helplines"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ourServiceBackground" />
+            app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
-        <View
-            android:id="@+id/ourServiceBackground"
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
             android:layout_width="440dp"
             android:layout_height="260dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
             android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/our_services_box"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+            <View
+                android:id="@+id/ourServiceBackground"
+                android:layout_width="440dp"
+                android:layout_height="260dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/our_services_box" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/servicesRecyclerView"
+                android:layout_width="406dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/services_items"
+                android:layout_centerVertical="true"
+                android:paddingStart="12dp"
+                android:clipToPadding="false"/>
+
+        </RelativeLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/helplineRecyclerViev"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="16dp"
             android:layout_marginTop="6dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/textView4"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
+            tools:listitem="@layout/helpline_items"
+            android:paddingStart="16dp"
+            android:clipToPadding="false"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

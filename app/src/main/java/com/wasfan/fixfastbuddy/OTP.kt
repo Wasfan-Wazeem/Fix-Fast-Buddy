@@ -33,6 +33,8 @@ class OTP : AppCompatActivity() {
     private lateinit var inputOTP2: EditText
     private lateinit var inputOTP3: EditText
     private lateinit var inputOTP4: EditText
+    private lateinit var inputOTP5: EditText
+    private lateinit var inputOTP6: EditText
     private lateinit var progressBar: ProgressBar
 
     private lateinit var OTP: String
@@ -59,10 +61,10 @@ class OTP : AppCompatActivity() {
         verifyBtn.setOnClickListener {
             //collect otp from all the edit texts
             val typedOTP =
-                (inputOTP1.text.toString() + inputOTP2.text.toString() + inputOTP3.text.toString() + inputOTP4.text.toString())
+                (inputOTP1.text.toString() + inputOTP2.text.toString() + inputOTP3.text.toString() + inputOTP4.text.toString() + inputOTP5.text.toString() + inputOTP6.text.toString())
 
             if (typedOTP.isNotEmpty()) {
-                if (typedOTP.length == 4) {
+                if (typedOTP.length == 6) {
                     val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
                         OTP, typedOTP
                     )
@@ -83,6 +85,8 @@ class OTP : AppCompatActivity() {
         inputOTP2.setText("")
         inputOTP3.setText("")
         inputOTP4.setText("")
+        inputOTP5.setText("")
+        inputOTP6.setText("")
         resendTV.visibility = View.INVISIBLE
         resendTV.isEnabled = false
 
@@ -166,7 +170,7 @@ class OTP : AppCompatActivity() {
     }
 
     private fun sendToMain() {
-        startActivity((Intent(this, MainActivity::class.java)))
+        startActivity((Intent(this, SignUpProfile::class.java)))
     }
 
     private fun addTextChangeListener() {
@@ -174,6 +178,8 @@ class OTP : AppCompatActivity() {
         inputOTP2.addTextChangedListener(EditTextWatcher(inputOTP2))
         inputOTP3.addTextChangedListener(EditTextWatcher(inputOTP3))
         inputOTP4.addTextChangedListener(EditTextWatcher(inputOTP4))
+        inputOTP5.addTextChangedListener(EditTextWatcher(inputOTP5))
+        inputOTP6.addTextChangedListener(EditTextWatcher(inputOTP6))
     }
 
     private fun init() {
@@ -185,6 +191,8 @@ class OTP : AppCompatActivity() {
         inputOTP2 = findViewById(R.id.otpNumber2)
         inputOTP3 = findViewById(R.id.otpNumber3)
         inputOTP4 = findViewById(R.id.otpNumber4)
+        inputOTP5 = findViewById(R.id.otpNumber5)
+        inputOTP6 = findViewById(R.id.otpNumber6)
     }
 
 
@@ -203,7 +211,9 @@ class OTP : AppCompatActivity() {
                 R.id.otpNumber1 -> if (text.length == 1) inputOTP2.requestFocus()
                 R.id.otpNumber2 -> if (text.length == 1) inputOTP3.requestFocus() else if (text.isEmpty()) inputOTP1.requestFocus()
                 R.id.otpNumber3 -> if (text.length == 1) inputOTP4.requestFocus() else if (text.isEmpty()) inputOTP2.requestFocus()
-                R.id.otpNumber4 -> if (text.isEmpty()) inputOTP3.requestFocus()
+                R.id.otpNumber4 -> if (text.length == 1) inputOTP5.requestFocus() else if (text.isEmpty()) inputOTP3.requestFocus()
+                R.id.otpNumber5 -> if (text.length == 1) inputOTP6.requestFocus() else if (text.isEmpty()) inputOTP4.requestFocus()
+                R.id.otpNumber6 -> if (text.isEmpty()) inputOTP5.requestFocus()
             }
         }
     }
