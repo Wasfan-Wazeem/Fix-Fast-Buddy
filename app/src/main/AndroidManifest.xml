@@ -28,11 +28,11 @@
             android:exported="false" />
         <activity
             android:name=".SignUpProfile"
-            android:exported="false" />
+            android:exported="false"/>
         <activity
             android:name=".SplashScreen"
             android:exported="true"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

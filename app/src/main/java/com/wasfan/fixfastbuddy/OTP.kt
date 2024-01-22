@@ -36,6 +36,7 @@ class OTP : AppCompatActivity() {
     private lateinit var inputOTP5: EditText
     private lateinit var inputOTP6: EditText
     private lateinit var progressBar: ProgressBar
+    private lateinit var otpNumberTV : TextView
 
     private lateinit var OTP: String
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
@@ -49,9 +50,11 @@ class OTP : AppCompatActivity() {
         phoneNumber = intent.getStringExtra("phoneNumber")!!
 
         init()
+        otpNumberTV.text = phoneNumber
         progressBar.visibility = View.INVISIBLE
         addTextChangeListener()
         resendOTPvVisibility()
+
 
         resendTV.setOnClickListener {
             resendVerificationCode()
@@ -93,7 +96,7 @@ class OTP : AppCompatActivity() {
         Handler(Looper.myLooper()!!).postDelayed(Runnable {
             resendTV.visibility = View.VISIBLE
             resendTV.isEnabled = true
-        }, 60000)
+        }, 30000)
     }
 
     private fun resendVerificationCode() {
@@ -170,7 +173,9 @@ class OTP : AppCompatActivity() {
     }
 
     private fun sendToMain() {
-        startActivity((Intent(this, SignUpProfile::class.java)))
+        val intent = (Intent(this, SignUpProfile::class.java))
+        intent.putExtra("phoneNumber", phoneNumber)
+        startActivity(intent)
     }
 
     private fun addTextChangeListener() {
@@ -193,6 +198,7 @@ class OTP : AppCompatActivity() {
         inputOTP4 = findViewById(R.id.otpNumber4)
         inputOTP5 = findViewById(R.id.otpNumber5)
         inputOTP6 = findViewById(R.id.otpNumber6)
+        otpNumberTV = findViewById((R.id.otpNumber))
     }
 
 

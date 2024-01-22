@@ -8,12 +8,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import kotlin.math.abs
 
 class HomeFragment : Fragment() {
@@ -32,6 +39,10 @@ class HomeFragment : Fragment() {
     private lateinit var servicesList : ArrayList<ServicesDataClass>
     private lateinit var servicesAdapter : ServicesAdapterClass
 
+    private lateinit var homeUserName : TextView
+
+    var usersList = ArrayList<Users>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,6 +52,8 @@ class HomeFragment : Fragment() {
 
         init(view)
         setUpTransformer()
+
+        showUser()
         viewPager2.setCurrentItem(1, false)
 
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
@@ -54,6 +67,32 @@ class HomeFragment : Fragment() {
         return view
     }
 
+    private fun showUser() {
+        val retrofitAPI = RetrofitInstance.api
+
+        val call: Call<List<Users>> = retrofitAPI.getUsers()
+
+        call.enqueue(object : Callback<List<Users>> {
+            override fun onResponse(call: Call<List<Users>>, response: Response<List<Users>>) {
+                if (!response.isSuccessful || response.body().isNullOrEmpty()) {
+                    homeUserName.text = "Error or Empty Response"
+                    return
+                }
+
+                usersList = response.body() as? ArrayList<Users> ?: arrayListOf()
+
+                if (usersList.isNotEmpty()) {
+                    homeUserName.text = "Hello " + usersList[0].firstName.toString()
+                } else {
+                    homeUserName.text = "No Users"
+                }
+            }
+
+            override fun onFailure(call: Call<List<Users>>, t: Throwable) {
+                Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_LONG).show()
+            }
+        })
+    }
 
     //Vehicle viewPager
     override fun onPause() {
@@ -147,6 +186,10 @@ class HomeFragment : Fragment() {
         servicesRecyclerView.layoutManager = GridLayoutManager(requireContext() , 2, RecyclerView.HORIZONTAL , false)
         servicesAdapter = ServicesAdapterClass(servicesList)
         servicesRecyclerView.adapter = servicesAdapter
+
+        //UserName
+        homeUserName = view.findViewById(R.id.homeUserName)
+
 
     }
 

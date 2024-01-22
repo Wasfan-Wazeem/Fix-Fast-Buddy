@@ -17,6 +17,9 @@ import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 class Phone : AppCompatActivity() {
@@ -133,10 +136,40 @@ class Phone : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
+    /*override fun onStart() {
         super.onStart()
         if(auth.currentUser != null){
-            startActivity(Intent(this, Navigation::class.java))
+            checkNumberInDatabase(auth.currentUser?.phoneNumber)
+            // startActivity(Intent(this, Navigation::class.java))
         }
     }
+
+    private fun checkNumberInDatabase(phoneNumber: String?) {
+        phoneNumber?.let {
+            val call = RetrofitInstance.api.checkPhoneNumber(it)
+            call.enqueue(object : Callback<Boolean> {
+                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                    if (response.isSuccessful) {
+                        val isNumberAvailableInDatabase = response.body() ?: false
+                        if (isNumberAvailableInDatabase) {
+                            // Number is available in the database, navigate to Navigation page
+                            startActivity(Intent(this@Phone, Navigation::class.java))
+                            finish() // Optional: Finish the current activity to prevent going back
+                        } else {
+                            // Number is not available in the database, user needs to sign in
+                        }
+                    } else {
+                        // Handle unsuccessful API response
+                        // Number availability check failed, user needs to sign in
+                    }
+                }
+
+                override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                    // Handle network failure
+                    // Number availability check failed, user needs to sign in
+                }
+            })
+        }
+    }*/
+
 }
