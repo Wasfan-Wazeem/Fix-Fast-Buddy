@@ -22,6 +22,9 @@ import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.concurrent.TimeUnit
 
 class OTP : AppCompatActivity() {
@@ -37,6 +40,7 @@ class OTP : AppCompatActivity() {
     private lateinit var inputOTP6: EditText
     private lateinit var progressBar: ProgressBar
     private lateinit var otpNumberTV : TextView
+    private lateinit var editTextTV : TextView
 
     private lateinit var OTP: String
     private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
@@ -79,6 +83,11 @@ class OTP : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Please Enter OTP", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        editTextTV.setOnClickListener{
+            startActivity(Intent(this@OTP, Phone::class.java))
+            finish()
         }
 
     }
@@ -160,7 +169,7 @@ class OTP : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     progressBar.visibility = View.VISIBLE
                     Toast.makeText(this, "Authenticate Successfully", Toast.LENGTH_SHORT).show()
-                    sendToMain()
+                    checkNumberInDatabase(phoneNumber)
                 } else {
                     // Sign in failed, display a message and update the UI
                     Log.d("TAG", "signInWithPhoneAuthCredential: ${task.exception.toString()}")
@@ -172,11 +181,47 @@ class OTP : AppCompatActivity() {
             }
     }
 
-    private fun sendToMain() {
+    private fun sendToSignUp() {
         val intent = (Intent(this, SignUpProfile::class.java))
         intent.putExtra("phoneNumber", phoneNumber)
         startActivity(intent)
+        finish()
     }
+
+    private fun checkNumberInDatabase(phoneNumber: String) {
+
+        val apiService = RetrofitInstance.api
+
+        val call = apiService.checkPhoneNumber(phoneNumber)
+
+        call.enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                if (response.isSuccessful) {
+                    val isAvailable = response.body() ?: false
+                    if (isAvailable) {
+                        // Phone number exists in the database
+                        Toast.makeText(this@OTP, "Phone number exists", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@OTP, Navigation::class.java))
+                        finish()
+                    } else {
+                        // Phone number does not exist in the database
+                        Toast.makeText(this@OTP, "Phone number does not exist", Toast.LENGTH_SHORT).show()
+                        sendToSignUp()
+                    }
+                } else {
+                    // Handle error response
+                    Toast.makeText(this@OTP, "Error checking phone number", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                // Handle network or unexpected errors
+                Toast.makeText(this@OTP, "Network error", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
 
     private fun addTextChangeListener() {
         inputOTP1.addTextChangedListener(EditTextWatcher(inputOTP1))
@@ -199,6 +244,7 @@ class OTP : AppCompatActivity() {
         inputOTP5 = findViewById(R.id.otpNumber5)
         inputOTP6 = findViewById(R.id.otpNumber6)
         otpNumberTV = findViewById((R.id.otpNumber))
+        editTextTV = findViewById(R.id.editText)
     }
 
 

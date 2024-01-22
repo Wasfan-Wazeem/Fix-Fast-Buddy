@@ -251,6 +251,7 @@ class SignUpVehicle : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     startActivity((Intent(this@SignUpVehicle, Navigation::class.java)))
+                    finish()
                 } else {
                     // Handle unsuccessful response
                     Toast.makeText(applicationContext, "Failed to create vehicle", Toast.LENGTH_SHORT)

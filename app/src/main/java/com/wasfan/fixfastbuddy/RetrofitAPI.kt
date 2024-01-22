@@ -7,11 +7,16 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface RetrofitAPI {
 
     @GET("read.php")
     fun getUsers(): Call<List<Users>>
+
+    @FormUrlEncoded
+    @POST("checkPhoneNum.php")
+    fun checkPhoneNumber(@Field("phoneNumber") phoneNumber: String): Call<Boolean>
 
     @FormUrlEncoded
     @POST("AddUser.php")

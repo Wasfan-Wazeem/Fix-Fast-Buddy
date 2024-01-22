@@ -48,7 +48,7 @@ class SignUpProfile : AppCompatActivity() {
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
+                if (response.isSuccessful && response.body() != null) {
                     // Handle successful response
                     Toast.makeText(
                         applicationContext,
@@ -58,6 +58,7 @@ class SignUpProfile : AppCompatActivity() {
                     val intent = Intent(this@SignUpProfile, SignUpVehicle::class.java)
                     intent.putExtra("phoneNumber", phoneNumber)
                     startActivity(intent)
+                    finish()
                 } else {
                     // Handle unsuccessful response
                     Toast.makeText(applicationContext, "Failed to create user", Toast.LENGTH_SHORT)

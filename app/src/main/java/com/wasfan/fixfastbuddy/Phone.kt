@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Spinner
 import android.widget.Toast
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -24,22 +27,25 @@ import java.util.concurrent.TimeUnit
 
 class Phone : AppCompatActivity() {
 
-    private lateinit var sendOTPBtn : Button
+    private lateinit var sendOTPBtn: Button
     private lateinit var phoneNumberET: EditText
-    private lateinit var auth : FirebaseAuth
-    private lateinit var number : String
-    private lateinit var mProgressBar : ProgressBar
+    private lateinit var auth: FirebaseAuth
+    private lateinit var number: String
+    private lateinit var mProgressBar: ProgressBar
+    private lateinit var countryCodeSpinner : Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_phone)
 
         init()
-        sendOTPBtn.setOnClickListener{
+        cCodeSpinner()
+        sendOTPBtn.setOnClickListener {
             number = phoneNumberET.text.trim().toString()
-            if(number.isNotEmpty()){
-                if(number.length == 9){
-                    number = "+94$number"
+            if (number.isNotEmpty()) {
+                if (number.length == 9) {
+                    val cCode = countryCodeSpinner.selectedItem.toString()
+                    number = "$cCode$number"
                     mProgressBar.visibility = View.VISIBLE
                     val options = PhoneAuthOptions.newBuilder(auth)
                         .setPhoneNumber(number) // Phone number to verify
@@ -49,21 +55,22 @@ class Phone : AppCompatActivity() {
                         .build()
                     PhoneAuthProvider.verifyPhoneNumber(options)
 
-                }else{
+                } else {
                     Toast.makeText(this, "Please Enter Correct Number", Toast.LENGTH_LONG).show()
                 }
-            }else{
+            } else {
                 Toast.makeText(this, "Please Enter Number", Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun init(){
+    private fun init() {
         mProgressBar = findViewById(R.id.phoneProgressBar)
         mProgressBar.visibility = View.INVISIBLE
         sendOTPBtn = findViewById(R.id.sendOTPbutton)
         phoneNumberET = findViewById(R.id.loginNumber)
         auth = FirebaseAuth.getInstance()
+        countryCodeSpinner = findViewById(R.id.countryCodeSpinner)
     }
 
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
@@ -71,7 +78,7 @@ class Phone : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    Toast.makeText(this,"Authenticate Successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Authenticate Successfully", Toast.LENGTH_SHORT).show()
                     sendToMain()
                 } else {
                     // Sign in failed, display a message and update the UI
@@ -84,7 +91,7 @@ class Phone : AppCompatActivity() {
             }
     }
 
-    private fun sendToMain(){
+    private fun sendToMain() {
         startActivity((Intent(this, MainActivity::class.java)))
         finish()
     }
@@ -107,13 +114,13 @@ class Phone : AppCompatActivity() {
 
             if (e is FirebaseAuthInvalidCredentialsException) {
                 // Invalid request
-                Log.d("TAG","onVerificationFailed: ${e.toString()}")
+                Log.d("TAG", "onVerificationFailed: ${e.toString()}")
             } else if (e is FirebaseTooManyRequestsException) {
                 // The SMS quota for the project has been exceeded
-                Log.d("TAG","onVerificationFailed: ${e.toString()}")
+                Log.d("TAG", "onVerificationFailed: ${e.toString()}")
             } else if (e is FirebaseAuthMissingActivityForRecaptchaException) {
                 // reCAPTCHA verification attempted with null Activity
-                Log.d("TAG","onVerificationFailed: ${e.toString()}")
+                Log.d("TAG", "onVerificationFailed: ${e.toString()}")
             }
 
             // Show a message and update the UI
@@ -136,40 +143,80 @@ class Phone : AppCompatActivity() {
         }
     }
 
+    private fun cCodeSpinner() {
+        val listItemsType = listOf("+94", "+91", "+11", "+47", "+74", "+86")
+
+        val arrayAdapterType =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, listItemsType)
+        arrayAdapterType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        countryCodeSpinner.adapter = arrayAdapterType
+        countryCodeSpinner.setSelection(0)
+
+        countryCodeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if (position == 0) {
+                    // Handle the hint selection (optional)
+                } else {
+                    val selectedItem = parent?.getItemAtPosition(position)?.toString()
+                    Toast.makeText(
+                        this@Phone,
+                        "Your car Make is $selectedItem",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+
+
+    }
+
     /*override fun onStart() {
         super.onStart()
         if(auth.currentUser != null){
-            checkNumberInDatabase(auth.currentUser?.phoneNumber)
-            // startActivity(Intent(this, Navigation::class.java))
+            checkNumberInDatabase(auth.currentUser?.phoneNumber.toString())
         }
     }
 
-    private fun checkNumberInDatabase(phoneNumber: String?) {
-        phoneNumber?.let {
-            val call = RetrofitInstance.api.checkPhoneNumber(it)
-            call.enqueue(object : Callback<Boolean> {
-                override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                    if (response.isSuccessful) {
-                        val isNumberAvailableInDatabase = response.body() ?: false
-                        if (isNumberAvailableInDatabase) {
-                            // Number is available in the database, navigate to Navigation page
-                            startActivity(Intent(this@Phone, Navigation::class.java))
-                            finish() // Optional: Finish the current activity to prevent going back
-                        } else {
-                            // Number is not available in the database, user needs to sign in
-                        }
-                    } else {
-                        // Handle unsuccessful API response
-                        // Number availability check failed, user needs to sign in
-                    }
-                }
+    private fun checkNumberInDatabase(phoneNumber: String) {
 
-                override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                    // Handle network failure
-                    // Number availability check failed, user needs to sign in
+        val apiService = RetrofitInstance.api
+
+        val call = apiService.checkPhoneNumber(phoneNumber)
+
+        call.enqueue(object : Callback<Boolean> {
+            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
+                if (response.isSuccessful) {
+                    val isAvailable = response.body() ?: false
+                    if (isAvailable) {
+                        // Phone number exists in the database
+                        Toast.makeText(this@Phone, "Phone number exists", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@Phone, Navigation::class.java))
+                        finish()
+                    } else {
+                        // Phone number does not exist in the database
+                        Toast.makeText(this@Phone, "Phone number does not exist", Toast.LENGTH_SHORT).show()
+                        sendToMain()
+                    }
+                } else {
+                    // Handle error response
+                    Toast.makeText(this@Phone, "Error checking phone number", Toast.LENGTH_SHORT).show()
                 }
-            })
-        }
+            }
+
+            override fun onFailure(call: Call<Boolean>, t: Throwable) {
+                // Handle network or unexpected errors
+                Toast.makeText(this@Phone, "Network error", Toast.LENGTH_SHORT).show()
+            }
+        })
     }*/
 
 }

@@ -35,12 +35,24 @@
         app:layout_constraintTop_toBottomOf="@+id/loginImage" />
     <!--ADD TO ABOVE android:textAppearance="@style/login"-->
 
+    <Spinner
+        android:id="@+id/countryCodeSpinner"
+        android:layout_width="57dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/vehicle_info_spinner_bg"
+        android:backgroundTint="@color/white"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginText" />
+
     <EditText
         android:id="@+id/loginNumber"
-        android:layout_width="327dp"
+        android:layout_width="260dp"
         android:layout_height="48dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="42dp"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="42dp"
         android:background="@drawable/login_text"
@@ -49,8 +61,6 @@
         android:inputType="number"
         android:paddingLeft="25dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginText" />
 
     <Button
