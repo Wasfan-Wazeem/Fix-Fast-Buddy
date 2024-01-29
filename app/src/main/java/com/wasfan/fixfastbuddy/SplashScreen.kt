@@ -14,7 +14,7 @@ import retrofit2.Response
 
 class SplashScreen : AppCompatActivity() {
 
-    private lateinit var auth : FirebaseAuth
+    private lateinit var auth: FirebaseAuth
     private val currentUser = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,9 +28,11 @@ class SplashScreen : AppCompatActivity() {
             val phoneNumber = currentUser?.phoneNumber
             if (auth.currentUser != null && !phoneNumber.isNullOrBlank()) {
                 checkNumberInDatabase(phoneNumber)
+
+            } else {
+                startActivity(Intent(this, Phone::class.java))
+                finish()
             }
-            startActivity(Intent(this, Phone::class.java))
-            finish()  // Close the splash activity
         }, 3000)
     }
 
@@ -46,16 +48,25 @@ class SplashScreen : AppCompatActivity() {
                     val isAvailable = response.body() ?: false
                     if (isAvailable) {
                         // Phone number exists in the database
-                        Toast.makeText(this@SplashScreen, "Phone number exists", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SplashScreen, "Phone number exists", Toast.LENGTH_SHORT)
+                            .show()
                         startActivity(Intent(this@SplashScreen, Navigation::class.java))
                         finish()
                     } else {
                         // Phone number does not exist in the database
-                        Toast.makeText(this@SplashScreen, "Phone number does not exist", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@SplashScreen,
+                            "Phone number does not exist",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
                     // Handle error response
-                    Toast.makeText(this@SplashScreen, "Error checking phone number", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@SplashScreen,
+                        "Error checking phone number",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 

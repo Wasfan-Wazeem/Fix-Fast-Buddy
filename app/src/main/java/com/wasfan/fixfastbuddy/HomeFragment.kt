@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,8 +41,9 @@ class HomeFragment : Fragment() {
     private lateinit var servicesAdapter : ServicesAdapterClass
 
     private lateinit var homeUserName : TextView
-
-    var usersList = ArrayList<Users>()
+    private lateinit var auth : FirebaseAuth
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+    val phoneNumber = currentUser?.phoneNumber.toString()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,47 +53,122 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
         init(view)
+        getUserInfo(phoneNumber)
+        viewPager2()
         setUpTransformer()
-
-        showUser()
-        viewPager2.setCurrentItem(1, false)
-
-        viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                handler.removeCallbacks(runnable)
-                /*handler.postDelayed(runnable , 2000)*/
-            }
-        })
 
         return view
     }
 
-    private fun showUser() {
-        val retrofitAPI = RetrofitInstance.api
+    private fun getUserInfo(phoneNumber: String){
+        val apiService = RetrofitInstance.api
 
-        val call: Call<List<Users>> = retrofitAPI.getUsers()
-
-        call.enqueue(object : Callback<List<Users>> {
-            override fun onResponse(call: Call<List<Users>>, response: Response<List<Users>>) {
-                if (!response.isSuccessful || response.body().isNullOrEmpty()) {
-                    homeUserName.text = "Error or Empty Response"
-                    return
-                }
-
-                usersList = response.body() as? ArrayList<Users> ?: arrayListOf()
-
-                if (usersList.isNotEmpty()) {
-                    homeUserName.text = "Hello " + usersList[0].firstName.toString()
+        val call = apiService.getUserDetails(phoneNumber)
+        call.enqueue(object : Callback<Users> {
+            override fun onResponse(call: Call<Users>, response: Response<Users>) {
+                if (response.isSuccessful) {
+                    val user = response.body()
+                    if (user != null) {
+                        homeUserName.text = "Hello, ${user.firstName}"
+                    }
                 } else {
-                    homeUserName.text = "No Users"
+                    Toast.makeText(requireContext(), "Failed to fetch user details", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<List<Users>>, t: Throwable) {
-                Toast.makeText(requireContext(), t.localizedMessage, Toast.LENGTH_LONG).show()
+            override fun onFailure(call: Call<Users>, t: Throwable) {
+                Toast.makeText(requireContext(), "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun viewPager2(){
+        val apiService = RetrofitInstance.api
+
+        val call: Call<List<Vehicles>> = apiService.getVehicleDetails(phoneNumber)
+
+        call.enqueue(object : Callback<List<Vehicles>> {
+            override fun onResponse(call: Call<List<Vehicles>>, response: Response<List<Vehicles>>) {
+                if (response.isSuccessful) {
+                    val vehicleListDB: List<Vehicles>? = response.body()
+                    // Initialize imageList and vehicleList here
+                    imageList = ArrayList()
+                    vehicleList = ArrayList()
+
+                    if (vehicleListDB != null) {
+                        for (vehicle in vehicleListDB) {
+                            vehicleList.add("${vehicle.make} ${vehicle.model} ${vehicle.year}")
+                            imageList.add(R.drawable.bmw)
+                        }
+                    }
+
+                    // Add the "Add Vehicle" item
+                    vehicleList.add("Add Vehicle")
+                    imageList.add(R.drawable.add_vehicle)
+
+                    // Initialize the handler and adapter here
+                    handler = Handler(Looper.myLooper()!!)
+                    adapter = VehicleImageAdapter(requireContext(), imageList, vehicleList)
+                    adapter.setOnItemClickListener(object : VehicleImageAdapter.onItemClickListener {
+                        override fun onItemClick(position: Int) {
+                            if (position == imageList.size - 1) {
+                                val intent = Intent(context, AddNewVehicle::class.java)
+                                startActivity(intent)
+                            } else {
+                                val intent = Intent(context, VehicleInfo::class.java)
+                                intent.putExtra("position", position)
+                                startActivity(intent)
+                            }
+                        }
+                    })
+
+                    // Set up the ViewPager2 with the initialized adapter
+                    viewPager2.adapter = adapter
+                    viewPager2.offscreenPageLimit = 3
+                    viewPager2.clipToPadding = false
+                    viewPager2.clipChildren = false
+                    viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+
+                    if(vehicleList.size >= 3) {
+                        viewPager2.setCurrentItem(1, false)
+                    }
+
+                    viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+                        override fun onPageSelected(position: Int) {
+                            super.onPageSelected(position)
+                            handler.removeCallbacks(runnable)
+                            /*handler.postDelayed(runnable , 2000)*/
+                        }
+                    })
+                } else {
+                    // Handle unsuccessful response
+                }
+            }
+
+            override fun onFailure(call: Call<List<Vehicles>>, t: Throwable) {
+                // Handle network error
+
+                // Initialize the handler and adapter with default values
+                handler = Handler(Looper.myLooper()!!)
+                imageList = ArrayList()
+                vehicleList = ArrayList()
+                vehicleList.add("Add Vehicle")
+                imageList.add(R.drawable.add_vehicle)
+
+                adapter = VehicleImageAdapter(requireContext(), imageList, vehicleList)
+                adapter.setOnItemClickListener(object : VehicleImageAdapter.onItemClickListener {
+                    override fun onItemClick(position: Int) {
+                        if (position == imageList.size - 1) {
+                            val intent = Intent(context, AddNewVehicle::class.java)
+                            startActivity(intent)
+                        }
+                    }
+                })
+                viewPager2.adapter = adapter
+
+            }
+        })
+
     }
 
     //Vehicle viewPager
@@ -125,31 +202,6 @@ class HomeFragment : Fragment() {
 
     private fun init(view: View){
         viewPager2 = view.findViewById(R.id.vehicleViewPager)
-        handler = Handler(Looper.myLooper()!!)
-        imageList = ArrayList()
-        vehicleList = ArrayList()
-
-        imageList.add(R.drawable.jeep)
-        imageList.add(R.drawable.bmw)
-        imageList.add(R.drawable.add_vehicle)
-
-        vehicleList.add("Jeep Wrangler 2019")
-        vehicleList.add("BMW 318i 2022")
-        vehicleList.add("Add Vehicle")
-
-        adapter = VehicleImageAdapter(requireContext(), imageList, vehicleList)
-        adapter.setOnItemClickListener { position ->
-            val intent = Intent(context, VehicleInfo::class.java)
-            intent.putExtra("vehicleName", vehicleList[position])
-            intent.putExtra("image", imageList[position])
-            startActivity(intent)
-        }
-
-        viewPager2.adapter = adapter
-        viewPager2.offscreenPageLimit = 3
-        viewPager2.clipToPadding = false
-        viewPager2.clipChildren = false
-        viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
 
         //Helpline
         recyclerView = view.findViewById(R.id.helplineRecyclerViev)

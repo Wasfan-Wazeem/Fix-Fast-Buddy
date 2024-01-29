@@ -140,6 +140,7 @@ class Phone : AppCompatActivity() {
             intent.putExtra("phoneNumber", number)
             startActivity(intent)
             mProgressBar.visibility = View.INVISIBLE
+            finish()
         }
     }
 

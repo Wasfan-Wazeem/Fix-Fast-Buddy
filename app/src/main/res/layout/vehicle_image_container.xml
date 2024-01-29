@@ -10,16 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@null">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/vehicleCardImage"
             android:layout_width="140dp"
             android:layout_height="140dp"
+
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:background="@drawable/card_image_background"
-            android:scaleType="fitCenter"
-            android:src="@drawable/bmw"
-            android:elevation="4dp"/>
+
+            app:srcCompat="@drawable/bmw" />
 
         <TextView
             android:id="@+id/vehicleCardText"

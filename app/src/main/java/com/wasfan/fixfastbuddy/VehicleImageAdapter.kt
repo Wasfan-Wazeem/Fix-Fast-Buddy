@@ -12,27 +12,37 @@ import androidx.recyclerview.widget.RecyclerView
 class VehicleImageAdapter(private val context: Context, private val imageList : ArrayList<Int>, private val vehicleList : ArrayList<String>)
     :RecyclerView.Adapter<VehicleImageAdapter.ImageViewHolder>()
 {
-    private var onItemClickListener: ((Int) -> Unit)? = null
+    private lateinit var mListener : onItemClickListener
 
-    fun setOnItemClickListener(listener: (Int) -> Unit) {
-        this.onItemClickListener = listener
+    interface onItemClickListener{
+
+        fun onItemClick(position: Int)
+
     }
 
-    inner class ImageViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
+    fun setOnItemClickListener(listener: onItemClickListener){
+
+        mListener = listener
+
+    }
+
+    inner class ImageViewHolder(itemView : View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView){
         val imageView : ImageView = itemView.findViewById(R.id.vehicleCardImage)
         val vehicleCardText : TextView = itemView.findViewById(R.id.vehicleCardText)
 
         init {
-            itemView.setOnClickListener {
-                // Call the onItemClick lambda function if set
-                onItemClickListener?.invoke(adapterPosition)
+            itemView.setOnClickListener{
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(position)
+                }
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.vehicle_image_container , parent , false)
-        return ImageViewHolder(view)
+        return ImageViewHolder(view, mListener)
     }
 
     override fun getItemCount(): Int {

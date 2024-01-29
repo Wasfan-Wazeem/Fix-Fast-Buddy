@@ -43,7 +43,14 @@ class SignUpVehicle : AppCompatActivity() {
         spinners()
 
         doneBtn.setOnClickListener {
-            addVehicle()
+            if (makeSpinner.selectedItem == 0 || modelSpinner.selectedItem == 0 || yearSpinner.selectedItem == 0
+                || typeSpinner.selectedItem == 0 || insuranceCarrierSpinner.selectedItem == 0 || licensePlate.text.isEmpty()) {
+                Toast.makeText(applicationContext, "Please enter all info to continue.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+            else {
+                addVehicle()
+            }
         }
 
     }

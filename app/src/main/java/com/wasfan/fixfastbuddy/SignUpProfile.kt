@@ -10,6 +10,8 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class SignUpProfile : AppCompatActivity() {
 
@@ -43,8 +45,11 @@ class SignUpProfile : AppCompatActivity() {
         val fName = firstNameET.text.toString()
         val lName = lastNameET.text.toString()
         val email = emailET.text.toString()
+        val currentDate = Date()
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val formattedDate = dateFormat.format(currentDate)
 
-        val call: Call<ResponseBody> = apiService.createUser(fName, lName, email, phoneNumber)
+        val call: Call<ResponseBody> = apiService.createUser(fName, lName, email, phoneNumber, formattedDate)
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
