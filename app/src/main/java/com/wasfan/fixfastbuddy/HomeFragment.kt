@@ -1,6 +1,7 @@
 package com.wasfan.fixfastbuddy
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,8 +9,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,6 +59,7 @@ class HomeFragment : Fragment() {
         init(view)
         getUserInfo(phoneNumber)
         viewPager2()
+        helplineRecyclerview()
         setUpTransformer()
 
         return view
@@ -199,23 +204,58 @@ class HomeFragment : Fragment() {
 
         viewPager2.setPageTransformer(transformer)
     }
+    //ViewPager2 End
 
-    private fun init(view: View){
-        viewPager2 = view.findViewById(R.id.vehicleViewPager)
-
-        //Helpline
-        recyclerView = view.findViewById(R.id.helplineRecyclerViev)
+    private fun helplineRecyclerview(){
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(requireContext() , RecyclerView.HORIZONTAL , false)
         helplineList = ArrayList()
 
-        helplineList.add(Helpline(R.drawable.hospital, "Hospital"))
-        helplineList.add(Helpline(R.drawable.police, "Police"))
-        helplineList.add(Helpline(R.drawable.fire_service, "Fire Service"))
-        helplineList.add(Helpline(R.drawable.insurance, "Insurance"))
+        helplineList.add(Helpline(R.drawable.hospital, "Hospital","+9411-2691111"))
+        helplineList.add(Helpline(R.drawable.police, "Police","119"))
+        helplineList.add(Helpline(R.drawable.fire_service, "Fire Service","110"))
+        helplineList.add(Helpline(R.drawable.insurance, "Insurance","+941234"))
 
         helplineAdapter = HelplineAdapter(helplineList)
         recyclerView.adapter = helplineAdapter
+
+        helplineAdapter.setOnItemClickListener(object : HelplineAdapter.onItemClickListener{
+            override fun onItemClick(position: Int) {
+                showHelplinePopup(helplineList[position].helplineImage, helplineList[position].helplineName, helplineList[position].helplinePhoneNumber)
+            }
+        })
+    }
+
+    private fun showHelplinePopup(image: Int, text: String, phoneNumber: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        val inflater = layoutInflater
+        val dialogView = inflater.inflate(R.layout.helpline_popup_layout, null)
+        builder.setView(dialogView)
+
+        val alertDialog = builder.create()
+
+        dialogView.findViewById<ImageView>(R.id.helplineImage).setImageResource(image)
+        dialogView.findViewById<TextView>(R.id.dialogTitle).text = "Call $text"
+        dialogView.findViewById<TextView>(R.id.dialogMessage).text = "Are you sure you want to call the $text"
+
+        dialogView.findViewById<Button>(R.id.btnCall).setOnClickListener {
+            // Call helpline
+            val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+            startActivity(intent)
+            alertDialog.dismiss()
+        }
+
+        dialogView.findViewById<Button>(R.id.btnCancel).setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+
+    private fun init(view: View){
+        viewPager2 = view.findViewById(R.id.vehicleViewPager)
+        recyclerView = view.findViewById(R.id.helplineRecyclerViev)
+
 
         //Services
         servicesRecyclerView = view.findViewById(R.id.servicesRecyclerView)

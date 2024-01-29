@@ -11,15 +11,39 @@ import androidx.recyclerview.widget.RecyclerView
 data class HelplineAdapter(private val helplineList: List<Helpline>) :
     RecyclerView.Adapter<HelplineAdapter.HelplineViewHolder>() {
 
-    class HelplineViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    private lateinit var mListener : onItemClickListener
+
+    interface onItemClickListener{
+
+        fun onItemClick(position: Int)
+
+    }
+
+    fun setOnItemClickListener(listener: onItemClickListener){
+
+        mListener = listener
+
+    }
+
+    class HelplineViewHolder(itemView: View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {
         val helplineImageView: ImageView = itemView.findViewById(R.id.helplineImage)
         val helplineNameTV: TextView = itemView.findViewById((R.id.helplineText))
 
+        init{
+
+            itemView.setOnClickListener{
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(position)
+                }
+            }
+
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HelplineViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.helpline_items , parent , false)
-        return HelplineViewHolder(view)
+        return HelplineViewHolder(view, mListener)
     }
 
     override fun getItemCount(): Int {
