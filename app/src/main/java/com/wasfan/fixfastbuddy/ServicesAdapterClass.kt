@@ -9,14 +9,41 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ServicesAdapterClass(private val servicesList : List<ServicesDataClass>) :
     RecyclerView.Adapter<ServicesAdapterClass.ServicesViewHolder>(){
-    class ServicesViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView) {
+
+    private lateinit var mListener : onItemClickListener
+
+    interface onItemClickListener{
+
+        fun onItemClick(position: Int)
+
+    }
+
+    fun setOnItemClickListener(listener: onItemClickListener){
+
+        mListener = listener
+
+    }
+
+    class ServicesViewHolder(itemView:View, listener: onItemClickListener) : RecyclerView.ViewHolder(itemView) {
         val servicesImageView: ImageView = itemView.findViewById(R.id.servicesImage)
         val servicesNameTV: TextView = itemView.findViewById((R.id.servicesText))
+
+        init{
+
+            itemView.setOnClickListener{
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(position)
+                }
+            }
+
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServicesViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.services_items, parent, false)
-        return ServicesViewHolder(view)
+        return ServicesViewHolder(view, mListener)
     }
 
     override fun getItemCount(): Int {

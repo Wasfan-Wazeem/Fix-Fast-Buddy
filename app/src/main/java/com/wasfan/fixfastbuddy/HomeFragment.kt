@@ -34,6 +34,7 @@ class HomeFragment : Fragment() {
     private lateinit var handler: Handler
     private lateinit var imageList : ArrayList<Int>
     private lateinit var vehicleList : ArrayList<String>
+    private lateinit var licensePlateNoList : ArrayList<String>
     private lateinit var adapter: VehicleImageAdapter
 
     private lateinit var recyclerView: RecyclerView
@@ -45,7 +46,6 @@ class HomeFragment : Fragment() {
     private lateinit var servicesAdapter : ServicesAdapterClass
 
     private lateinit var homeUserName : TextView
-    private lateinit var auth : FirebaseAuth
     private val currentUser = FirebaseAuth.getInstance().currentUser
     val phoneNumber = currentUser?.phoneNumber.toString()
 
@@ -59,6 +59,7 @@ class HomeFragment : Fragment() {
         init(view)
         getUserInfo(phoneNumber)
         viewPager2()
+        servicesRecyclerView()
         helplineRecyclerview()
         setUpTransformer()
 
@@ -87,7 +88,7 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun viewPager2(){
+    fun viewPager2(){
         val apiService = RetrofitInstance.api
 
         val call: Call<List<Vehicles>> = apiService.getVehicleDetails(phoneNumber)
@@ -99,11 +100,13 @@ class HomeFragment : Fragment() {
                     // Initialize imageList and vehicleList here
                     imageList = ArrayList()
                     vehicleList = ArrayList()
+                    licensePlateNoList = ArrayList()
 
                     if (vehicleListDB != null) {
                         for (vehicle in vehicleListDB) {
                             vehicleList.add("${vehicle.make} ${vehicle.model} ${vehicle.year}")
                             imageList.add(R.drawable.bmw)
+                            licensePlateNoList.add(vehicle.licensePlateNo)
                         }
                     }
 
@@ -252,14 +255,8 @@ class HomeFragment : Fragment() {
         alertDialog.show()
     }
 
-    private fun init(view: View){
-        viewPager2 = view.findViewById(R.id.vehicleViewPager)
-        recyclerView = view.findViewById(R.id.helplineRecyclerViev)
-
-
-        //Services
-        servicesRecyclerView = view.findViewById(R.id.servicesRecyclerView)
-        recyclerView.setHasFixedSize(true)
+    private fun servicesRecyclerView(){
+        servicesRecyclerView.setHasFixedSize(true)
         servicesList = ArrayList()
 
         servicesList.add(ServicesDataClass(R.drawable.services_tyre, "Tyre"))
@@ -278,11 +275,24 @@ class HomeFragment : Fragment() {
         servicesRecyclerView.layoutManager = GridLayoutManager(requireContext() , 2, RecyclerView.HORIZONTAL , false)
         servicesAdapter = ServicesAdapterClass(servicesList)
         servicesRecyclerView.adapter = servicesAdapter
+        servicesAdapter.setOnItemClickListener(object : ServicesAdapterClass.onItemClickListener{
+            override fun onItemClick(position: Int) {
+                val intent = Intent(context, MapsActivity::class.java)
+                intent.putExtra("vehicleName", vehicleList[viewPager2.currentItem])
+                intent.putExtra("vehicleImage", imageList[viewPager2.currentItem])
+                intent.putExtra("serviceName", servicesList[position].servicesName)
+                intent.putExtra("serviceImage", servicesList[position].servicesImage)
+                intent.putExtra("licensePlateNo", licensePlateNoList[viewPager2.currentItem])
+                startActivity(intent)
+            }
+        })
+    }
 
-        //UserName
+    private fun init(view: View){
+        viewPager2 = view.findViewById(R.id.vehicleViewPager)
+        recyclerView = view.findViewById(R.id.helplineRecyclerViev)
+        servicesRecyclerView = view.findViewById(R.id.servicesRecyclerView)
         homeUserName = view.findViewById(R.id.homeUserName)
-
-
     }
 
 }
