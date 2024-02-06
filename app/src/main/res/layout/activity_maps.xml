@@ -27,14 +27,25 @@
         android:layout_marginTop="41.25dp"/>
 
     <View
-        android:id="@+id/currentLocationViewBtn"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:background="@drawable/my_location_button_bg"
+        app:layout_constraintBottom_toTopOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="35dp"
+        android:layout_marginBottom="10dp"/>
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/currentLocationSBtn"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:background="@drawable/ongoing_blue_circle"
+        android:src="@drawable/my_location"
+        android:background="@drawable/my_location_button_bg"
+        android:backgroundTint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="40dp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="15dp"/>
 
     <androidx.cardview.widget.CardView
         android:layout_width="0dp"

@@ -5,5 +5,6 @@ data class Users(
     val lastName : String,
     val phoneNumber : String,
     val email : String,
-    val dateJoined : String
+    val dateJoined : String,
+    val profileImagePath : String
 )
