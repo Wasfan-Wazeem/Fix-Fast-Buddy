@@ -1,11 +1,14 @@
 package com.wasfan.fixfastbuddy
 
 import android.Manifest
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
@@ -26,6 +29,8 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.imageview.ShapeableImageView
 import android.view.View
+import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import com.google.android.gms.maps.model.Marker
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
@@ -42,6 +47,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private var mGoogleMap: GoogleMap? = null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var lastLocation : Location
+
+    private var loadingDialog: Dialog? = null
 
     companion object{
         private const val LOCATION_REQUEST_CODE = 1
@@ -90,6 +97,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
 
         confirmBtn.setOnClickListener {
+            showLoadingDialog()
             val intent = Intent(this, OngoingService::class.java)
 
             startActivity(intent)
@@ -101,6 +109,33 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     }
 
+    private fun showLoadingDialog() {
+        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view = inflater.inflate(R.layout.map_loading_box_layout, null)
+
+        val cancelButton = view.findViewById<Button>(R.id.cancelButton)
+        cancelButton.setOnClickListener {
+            // Handle cancel button click
+            cancelLoadingDialog()
+        }
+
+        val loadingImageView = view.findViewById<ImageView>(R.id.loadingImage)
+        // Load the rotation animation
+        val rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate_animation)
+
+        // Start the animation on the ImageView
+        loadingImageView.startAnimation(rotateAnimation)
+
+        loadingDialog = Dialog(this)
+        loadingDialog?.setContentView(view)
+        loadingDialog?.setCancelable(false) // To prevent cancel on outside touch
+        loadingDialog?.show()
+    }
+
+    private fun cancelLoadingDialog() {
+        loadingDialog?.dismiss()
+        // Add your cancellation logic here
+    }
 
     private fun addMarker(latLng: LatLng) {
         mGoogleMap?.clear()

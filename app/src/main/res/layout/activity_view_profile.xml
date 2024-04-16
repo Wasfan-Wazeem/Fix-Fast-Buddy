@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ViewProfile">
@@ -51,9 +52,9 @@
         android:layout_height="40dp"
         android:layout_marginStart="-50dp"
         android:layout_marginTop="-40dp"
+        android:background="@null"
         android:clickable="true"
         android:src="@drawable/image_picker"
-        android:background="@null"
         app:layout_constraintStart_toEndOf="@+id/profilePicIV"
         app:layout_constraintTop_toBottomOf="@+id/profilePicIV"
         tools:ignore="TouchTargetSize" />
@@ -85,5 +86,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/deleteBtn" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="170dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="152dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/profileBackground" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.wasfan.fixfastbuddy.dataClasses.OngoingDataClass
 
 class OngoingAdapterClass(private val dataList: ArrayList<OngoingDataClass>) :
     RecyclerView.Adapter<OngoingAdapterClass.ViewHolderClass>() {
