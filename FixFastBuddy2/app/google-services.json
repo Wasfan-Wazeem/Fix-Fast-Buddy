@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "815147645803",
+    "project_id": "fix-fast-buddy-b24a0",
+    "storage_bucket": "fix-fast-buddy-b24a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815147645803:android:7896258c92a50f1b6baa2e",
+        "android_client_info": {
+          "package_name": "com.wasfan.fixfastbuddy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApGBCEwihOksQONiopPZI7CnW3FOCuRzw"
+        },
+        {
+          "current_key": "AIzaSyD4wkKDdK04XOdK0Ps2RsBYJfgEnE4sc40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:815147645803:android:11803af3b5152af16baa2e",
+        "android_client_info": {
+          "package_name": "com.wasfan.fixfastbuddy2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApGBCEwihOksQONiopPZI7CnW3FOCuRzw"
+        },
+        {
+          "current_key": "AIzaSyD4wkKDdK04XOdK0Ps2RsBYJfgEnE4sc40"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

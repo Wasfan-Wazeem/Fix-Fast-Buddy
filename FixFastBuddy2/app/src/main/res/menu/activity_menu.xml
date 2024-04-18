@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/act_ongoing"
+    android:title="Ongoing"/>
+
+    <item
+        android:id="@+id/act_completed"
+        android:title="Completed"/>
+
+    <item
+        android:id="@+id/act_cancelled"
+        android:title="Cancelled"/>
+</menu>

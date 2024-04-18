@@ -178,7 +178,7 @@ class ViewProfile : AppCompatActivity(), UploadRequestBody.UploadCallback {
 
     }
 
-    //Close ImageScene
+    //Close Image
 
     private fun fetchUserDetails(pNumber: String) {
         val apiService = RetrofitInstance.api

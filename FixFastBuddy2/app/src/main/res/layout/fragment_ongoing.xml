@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg"
+    tools:context="mechanic.ongoing">
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/rect"
+        app:cardBackgroundColor="#ffffff"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="10dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+
+        <ImageView
+            android:layout_width="325dp"
+            android:layout_height="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="75dp"
+            android:src="@drawable/line_6" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="25dp"
+            android:gravity="center_horizontal"
+            android:text="@string/ongoing_eme"
+            android:textColor="#3876C1"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="90dp"
+            android:src="@drawable/man" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="90dp"
+            android:gravity="center_horizontal"
+            android:text="@string/user"
+            android:textColor="#3876C1"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="128dp"
+            android:layout_marginTop="115dp"
+            android:text="@string/_94_77_123_4567"
+            android:textColor="#3876C1"
+            android:textSize="12sp" />
+
+        <TextView
+            style="@style/Grey"
+            android:layout_marginStart="128dp"
+            android:layout_marginTop="145dp"
+            android:text="@string/vehicle" />
+
+        <TextView
+            style="@style/Black"
+            android:layout_marginStart="178dp"
+            android:layout_marginTop="145dp"
+            android:text="@string/bmw_539_nwb_o2k_1717" />
+
+        <TextView
+            style="@style/Grey"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="185dp"
+            android:text="@string/distance" />
+
+
+        <TextView
+            style="@style/Grey"
+            android:layout_marginTop="185dp"
+            android:gravity="center_horizontal"
+            android:text="@string/inspection_travel" />
+
+
+        <TextView
+            style="@style/Grey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="185dp"
+            android:layout_marginEnd="25dp"
+            android:text="@string/problem" />
+
+
+        <TextView
+            style="@style/Black"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="200dp"
+            android:text="@string/_500m" />
+
+
+        <TextView
+            style="@style/Black"
+            android:layout_marginTop="200dp"
+            android:gravity="center_horizontal"
+            android:text="@string/rs_200" />
+
+        <TextView
+            style="@style/Black"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="200dp"
+            android:layout_marginEnd="35dp"
+            android:text="@string/tire" />
+
+
+
+<!--        <ImageButton-->
+<!--            android:id="@+id/call"-->
+<!--            android:text="call"-->
+<!--            android:layout_marginStart="290dp"-->
+<!--            android:layout_marginTop="80dp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/call" />-->
+
+        <ImageButton
+            android:id="@+id/call"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="290dp"
+            android:layout_marginTop="80dp"
+            android:src="@drawable/call"
+            android:contentDescription="@string/call_button_description"
+            android:padding="16dp"/>
+
+
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>

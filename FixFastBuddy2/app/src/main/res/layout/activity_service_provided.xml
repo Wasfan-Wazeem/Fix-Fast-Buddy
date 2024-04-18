@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@drawable/bg"
+    tools:context=".mechanic.serviceProvided">
+
+
+
+        <TextView
+            android:layout_width="367dp"
+            android:layout_height="39dp"
+            android:text="@string/services_provided"
+            android:textColor="@color/white"
+            android:fontFamily="times"
+            android:textSize="35sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="22dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="108dp"
+            android:gravity="top" />
+
+
+<!--        <View-->
+<!--            android:layout_width="355dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:background="@drawable/borderbox"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="25dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="283dp"-->
+<!--            tools:ignore="MissingConstraints">-->
+
+<!--        </View>-->
+
+
+<!--        <CheckBox-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginLeft="30dp"-->
+<!--            android:layout_marginTop="280dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            tools:ignore="MissingConstraints">-->
+
+<!--        </CheckBox>-->
+
+<!--        <TextView-->
+<!--            android:layout_width="206dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:text="@string/tires"-->
+<!--            android:textColor="#112D4E"-->
+<!--            android:textSize="19dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="73dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="291dp"/>-->
+
+
+<!--        <View-->
+<!--            android:id="@+id/view"-->
+<!--            android:layout_width="355dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginLeft="25dp"-->
+<!--            android:layout_marginTop="343dp"-->
+<!--            android:background="@drawable/borderbox"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent">-->
+
+<!--        </View>-->
+
+<!--        <CheckBox-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_marginLeft="30dp"-->
+<!--            android:layout_marginTop="340dp">-->
+
+<!--        </CheckBox>-->
+
+
+<!--        <TextView-->
+<!--            android:layout_width="206dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:text="@string/engines"-->
+<!--            android:textColor="#112D4E"-->
+<!--            android:textSize="19dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="73dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="351dp"/>-->
+
+
+<!--        <View-->
+<!--            android:layout_width="355dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:background="@drawable/borderbox"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="25dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="403dp">-->
+
+<!--        </View>-->
+
+<!--        <CheckBox-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="30dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="400dp"-->
+<!--            tools:ignore="MissingConstraints"-->
+<!--            >-->
+
+<!--        </CheckBox>-->
+
+
+<!--        <TextView-->
+<!--            android:layout_width="206dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:text="@string/jump_start"-->
+<!--            android:textColor="#112D4E"-->
+<!--            android:textSize="19dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="73dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="411dp"/>-->
+
+
+<!--        <View-->
+<!--            android:layout_width="355dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:background="@drawable/borderbox"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="25dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="463dp">-->
+
+<!--        </View>-->
+
+<!--        <CheckBox-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="30dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="460dp"-->
+<!--            tools:ignore="MissingConstraints"-->
+<!--            >-->
+
+<!--        </CheckBox>-->
+
+
+<!--        <TextView-->
+<!--            android:layout_width="206dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:text="Locked-out Services"-->
+<!--            android:textColor="#112D4E"-->
+<!--            android:textSize="19dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="73dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="471dp"-->
+<!--            tools:ignore="MissingConstraints"/>-->
+
+
+<!--        <View-->
+<!--            android:layout_width="355dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:background="@drawable/borderbox"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="25dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="523dp">-->
+
+<!--        </View>-->
+
+<!--        <CheckBox-->
+<!--            android:layout_width="50dp"-->
+<!--            android:layout_height="50dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="30dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="520dp"-->
+<!--            tools:ignore="MissingConstraints"-->
+<!--            >-->
+
+<!--        </CheckBox>-->
+
+
+<!--        <TextView-->
+<!--            android:layout_width="206dp"-->
+<!--            android:layout_height="45dp"-->
+<!--            android:text="Fuel Delivery"-->
+<!--            android:textColor="#112D4E"-->
+<!--            android:textSize="19dp"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_alignParentLeft="true"-->
+<!--            android:layout_marginLeft="73dp"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_marginTop="531dp"/>-->
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="200dp"
+
+            />
+
+        <Button
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:background="@drawable/button_background"
+            android:text="Continue"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="650dp"
+            android:layout_marginStart="100dp"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

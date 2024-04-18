@@ -28,10 +28,17 @@ import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.material.imageview.ShapeableImageView
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import com.google.android.gms.maps.model.Marker
+import com.google.firebase.auth.FirebaseAuth
+import com.wasfan.fixfastbuddy.dataClasses.ServiceResponseDataClass
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -42,15 +49,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var licensePlateNoTV: TextView
     private lateinit var serviceNameTV: TextView
     private lateinit var serviceImageSIV: ShapeableImageView
-    private lateinit var currentLocationSBtn : ShapeableImageView
+    private lateinit var currentLocationSBtn: ShapeableImageView
 
     private var mGoogleMap: GoogleMap? = null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var lastLocation : Location
+    private lateinit var lastLocation: Location
+    private var lastLocationLatLng: LatLng? = null
 
     private var loadingDialog: Dialog? = null
 
-    companion object{
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+    val phoneNumber = currentUser?.phoneNumber.toString()
+
+    companion object {
         private const val LOCATION_REQUEST_CODE = 1
     }
 
@@ -59,6 +70,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         setContentView(R.layout.activity_maps)
 
         init()
+        lastLocationLatLng = LatLng(0.00,0.00)
 
         // Initialize FusedLocationProviderClient
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -79,6 +91,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             }
 
             override fun onPlaceSelected(place: Place) {
+                lastLocationLatLng = place.latLng!!
                 val addrr = place.address
                 // val id = place.id
                 autocompleteFragment.setText(addrr)
@@ -97,10 +110,31 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
 
         confirmBtn.setOnClickListener {
-            showLoadingDialog()
-            val intent = Intent(this, OngoingService::class.java)
+            if (lastLocationLatLng == null) {
+                Toast.makeText(
+                    this@MapsActivity,
+                    "Please select a location.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val currentDate = Date()
+                // For date
+                val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+                val formattedDate = dateFormat.format(currentDate)
+                // For time
+                val timeFormat = SimpleDateFormat("HH:mm:ss")
+                val formattedTime = timeFormat.format(currentDate)
 
-            startActivity(intent)
+                var latitude = "${lastLocationLatLng?.latitude}"
+                var longitude = "${lastLocationLatLng?.longitude}"
+
+                sendServiceRequest("101", phoneNumber, latitude, longitude, formattedDate, formattedTime)
+
+                showLoadingDialog()
+                /*val intent = Intent(this, OngoingService::class.java)
+
+                startActivity(intent)*/
+            }
         }
 
         currentLocationSBtn.setOnClickListener {
@@ -116,6 +150,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         val cancelButton = view.findViewById<Button>(R.id.cancelButton)
         cancelButton.setOnClickListener {
             // Handle cancel button click
+            cancelServiceRequest(phoneNumber)
             cancelLoadingDialog()
         }
 
@@ -137,19 +172,56 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         // Add your cancellation logic here
     }
 
-    private fun addMarker(latLng: LatLng) {
-        mGoogleMap?.clear()
-        mGoogleMap?.addMarker(
-            MarkerOptions()
-                .position(latLng)
-                .title("Current Location")
-        )
+    private fun sendServiceRequest(serviceID: String, userPhoneNumber: String, latitude: String, longitude: String, date: String, time: String) {
+        val apiService = RetrofitInstance.api
+        val call = apiService.submitServiceRequest(serviceID, userPhoneNumber, latitude, longitude, date, time)
+
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    // Handle successful response
+                    val responseBody = response.body()?.string() // Get the raw JSON string
+                    val message = "Success: $responseBody" // Use the raw JSON string as the message
+                    Toast.makeText(this@MapsActivity, message, Toast.LENGTH_SHORT).show()
+                    println(message)
+                } else {
+                    // Handle request errors depending on status code
+                    val errorBody = response.errorBody()?.string()
+                    Toast.makeText(this@MapsActivity, "Request Error: $errorBody", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                // Handle failure to execute the request, e.g., no internet, server down
+                Toast.makeText(this@MapsActivity, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
-    private fun zoomOnMap(latLng: LatLng) {
-        val newLatLngZoom =
-            CameraUpdateFactory.newLatLngZoom(latLng, 16f) //12f -> amount of zoom level
-        mGoogleMap?.animateCamera(newLatLngZoom)
+    private fun cancelServiceRequest(userPhoneNumber: String) {
+        val apiService = RetrofitInstance.api
+        val call = apiService.cancelServiceRequest(userPhoneNumber)
+
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    // Handle successful response
+                    val responseBody = response.body()?.string() // Get the raw JSON string
+                    val message = "Success: $responseBody" // Use the raw JSON string as the message
+                    Toast.makeText(this@MapsActivity, message, Toast.LENGTH_SHORT).show()
+                    println(message)
+                } else {
+                    // Handle request errors depending on status code
+                    val errorBody = response.errorBody()?.string()
+                    Toast.makeText(this@MapsActivity, "Request Error: $errorBody", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                // Handle failure to execute the request, e.g., no internet, server down
+                Toast.makeText(this@MapsActivity, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun init() {
@@ -171,8 +243,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         vehicleNameTV.text = vehicleName
         serviceNameTV.text = serviceName
         licensePlateNoTV.text = licensePlateNo
+        vehicleImageSIV.setImageResource(vehicleImage)
+        serviceImageSIV.setImageResource(serviceImage)
 
 
+    }
+
+    private fun addMarker(latLng: LatLng) {
+        mGoogleMap?.clear()
+        mGoogleMap?.addMarker(
+            MarkerOptions()
+                .position(latLng)
+                .title("Current Location")
+        )
+    }
+
+    private fun zoomOnMap(latLng: LatLng) {
+        val newLatLngZoom =
+            CameraUpdateFactory.newLatLngZoom(latLng, 16f) //12f -> amount of zoom level
+        mGoogleMap?.animateCamera(newLatLngZoom)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -183,19 +272,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         setUpMap()
     }
 
-    private fun setUpMap(){
+    private fun setUpMap() {
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_REQUEST_CODE)
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                LOCATION_REQUEST_CODE
+            )
             return
         }
         mGoogleMap!!.isMyLocationEnabled = true
-        fusedLocationProviderClient.lastLocation.addOnSuccessListener(this) {location ->
-            if(location!=null){
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener(this) { location ->
+            if (location != null) {
                 lastLocation = location
                 val currentLatLong = LatLng(location.latitude, location.longitude)
+                lastLocationLatLng = currentLatLong
                 addMarker(currentLatLong)
                 zoomOnMap(currentLatLong)
             }
