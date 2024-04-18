@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+// grey text
+<style name="Grey">
+    <item name="android:textSize">12sp</item>
+    <item name="android:textColor">#7E7B7B</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+</style>
+
+//black text
+<style name="Black">
+    <item name="android:textSize">12sp</item>
+    <item name="android:textColor">#000000</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+</style>
+
+<style name="inspection_">
+    <item name="android:textSize">14sp</item>
+    <item name="android:textColor">#112D4E</item>
+</style>
+
+
+//black1 text
+<style name="Black1">
+    <item name="android:textSize">18sp</item>
+    <item name="android:textColor">#000000</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+</style>
+// grey text1
+<style name="Grey1">
+    <item name="android:textSize">18sp</item>
+    <item name="android:textColor">#515151</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+</style>
+
+<style name="your_servic">
+    <item name="android:textSize">25sp</item>
+    <item name="android:textColor">#FFFEFE</item>
+</style>
+
+
+
+<style name="cancelled">
+    <item name="android:textSize">15sp</item>
+    <item name="android:textColor">#FFFFFF</item>
+</style>
+</resources>
