@@ -39,6 +39,16 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Date
+import android.location.Address
+import android.location.Geocoder
+import com.wasfan.fixfastbuddy.dataClasses.requestDataClass
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.IOException
+import java.util.Locale
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
@@ -51,6 +61,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var serviceImageSIV: ShapeableImageView
     private lateinit var currentLocationSBtn: ShapeableImageView
 
+    private lateinit var vehicleName: String
+
     private var mGoogleMap: GoogleMap? = null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var lastLocation: Location
@@ -60,6 +72,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     private val currentUser = FirebaseAuth.getInstance().currentUser
     val phoneNumber = currentUser?.phoneNumber.toString()
+
+    @Volatile
+    private var isRunning: Boolean = true
 
     companion object {
         private const val LOCATION_REQUEST_CODE = 1
@@ -118,22 +133,19 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 ).show()
             } else {
                 val currentDate = Date()
-                // For date
                 val dateFormat = SimpleDateFormat("yyyy-MM-dd")
                 val formattedDate = dateFormat.format(currentDate)
-                // For time
                 val timeFormat = SimpleDateFormat("HH:mm:ss")
                 val formattedTime = timeFormat.format(currentDate)
 
+                val userAddress = getAddressFromLatLng(this, lastLocationLatLng!!.latitude, lastLocationLatLng!!.longitude)
                 var latitude = "${lastLocationLatLng?.latitude}"
                 var longitude = "${lastLocationLatLng?.longitude}"
 
-                sendServiceRequest("101", phoneNumber, latitude, longitude, formattedDate, formattedTime)
+                sendServiceRequest("101", phoneNumber, latitude, longitude, formattedDate, formattedTime, vehicleName, userAddress)
 
+                startAcceptingServiceRequests(phoneNumber)
                 showLoadingDialog()
-                /*val intent = Intent(this, OngoingService::class.java)
-
-                startActivity(intent)*/
             }
         }
 
@@ -143,6 +155,63 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     }
 
+    private fun startAcceptingServiceRequests(userPhoneNumber: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            while (isRunning) {
+                acceptServiceRequest(userPhoneNumber)
+                delay(5000) // Delay for 5 seconds before the next check
+            }
+        }
+    }
+
+    private suspend fun acceptServiceRequest(userPhoneNumber: String) {
+        val retrofitAPI = RetrofitInstance.api
+        val call: Call<requestDataClass> = retrofitAPI.checkRequestStatus(userPhoneNumber)
+
+        try {
+            val response: Response<requestDataClass> = call.execute()
+            if (response.isSuccessful) {
+                val responseData: requestDataClass? = response.body()
+                responseData?.let {
+                    if(it.status == "Accepted"){
+                        withContext(Dispatchers.Main) {
+                            isRunning = false
+                            println(it)
+                            val intent = Intent(this@MapsActivity, OngoingService::class.java).apply {
+                                putExtra("requestData", it)
+                            }
+                            startActivity(intent)
+                            finish()
+                        }
+                    } else {
+                        println("Service request status: ${it.status}")
+                    }
+                }
+            } else {
+                println("Failed to check request status: ${response.message()}")
+            }
+        } catch (e: Exception) {
+            println("Exception occurred while checking request status: ${e.message}")
+        }
+    }
+
+    fun getAddressFromLatLng(context: Context, latitude: Double, longitude: Double): String? {
+        val geocoder = Geocoder(context, Locale.getDefault())
+        try {
+            val addresses: MutableList<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
+            if (addresses != null) {
+                if (addresses.isNotEmpty()) {
+                    val address: Address = addresses[0]
+                    // You can customize the address details here based on your requirement
+                    return address.getAddressLine(0)
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
     private fun showLoadingDialog() {
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val view = inflater.inflate(R.layout.map_loading_box_layout, null)
@@ -150,6 +219,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         val cancelButton = view.findViewById<Button>(R.id.cancelButton)
         cancelButton.setOnClickListener {
             // Handle cancel button click
+            isRunning = false
             cancelServiceRequest(phoneNumber)
             cancelLoadingDialog()
         }
@@ -172,9 +242,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         // Add your cancellation logic here
     }
 
-    private fun sendServiceRequest(serviceID: String, userPhoneNumber: String, latitude: String, longitude: String, date: String, time: String) {
+    private fun sendServiceRequest(serviceID: String, userPhoneNumber: String, latitude: String, longitude: String, date: String, time: String, vehicleName: String, address:String?) {
         val apiService = RetrofitInstance.api
-        val call = apiService.submitServiceRequest(serviceID, userPhoneNumber, latitude, longitude, date, time)
+        val call = apiService.submitServiceRequest(serviceID, userPhoneNumber, latitude, longitude, date, time, vehicleName, address)
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -225,7 +295,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     private fun init() {
-        val vehicleName: String = intent.getStringExtra("vehicleName")!!
+        vehicleName = intent.getStringExtra("vehicleName")!!
         val vehicleImage: Int = intent.getIntExtra("vehicleImage", 0)!!
         val serviceName: String = intent.getStringExtra("serviceName")!!
         val serviceImage: Int = intent.getIntExtra("serviceImage", 0)!!

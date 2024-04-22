@@ -71,6 +71,7 @@ class ViewProfile : AppCompatActivity(), UploadRequestBody.UploadCallback {
 
         imagePickerBtn.setOnClickListener {
             imagePicker()
+            uploadImage()
         }
 
         backBtn.setOnClickListener {
@@ -178,7 +179,7 @@ class ViewProfile : AppCompatActivity(), UploadRequestBody.UploadCallback {
 
     }
 
-    //Close Image
+    //Close Image Scene
 
     private fun fetchUserDetails(pNumber: String) {
         val apiService = RetrofitInstance.api
@@ -364,3 +365,4 @@ class ViewProfile : AppCompatActivity(), UploadRequestBody.UploadCallback {
         })
     }
 }
+

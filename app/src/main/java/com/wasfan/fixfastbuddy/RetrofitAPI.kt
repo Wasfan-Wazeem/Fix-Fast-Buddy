@@ -1,11 +1,15 @@
 package com.wasfan.fixfastbuddy
 
 
+import com.wasfan.fixfastbuddy.dataClasses.DirectionsResponse
+import com.wasfan.fixfastbuddy.dataClasses.requestDataClass
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 interface RetrofitAPI {
     //Read
@@ -84,13 +88,29 @@ interface RetrofitAPI {
         @Field("userLatitude") userLatitude: String,
         @Field("userLongitude") userLongitude: String,
         @Field("date") date: String,
-        @Field("time") time: String
+        @Field("time") time: String,
+        @Field("vehicleName") vehicleName: String,
+        @Field("userAddress") userAddress: String?
     ): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("checkRequestStatus.php")
+    fun checkRequestStatus(
+        @Field("userPhoneNumber") userPhoneNumber: String
+    ): Call<requestDataClass>
 
     @FormUrlEncoded
     @POST("CancelRequest.php")
     fun cancelServiceRequest(
         @Field("userPhoneNumber") userPhoneNumber: String,
     ): Call<ResponseBody>
+
+    //Get directions from google maps
+    @GET("maps/api/directions/json")
+    fun getDirections(
+        @Query("origin") origin: String,
+        @Query("destination") destination: String,
+        @Query("key") apiKey: String
+    ): Call<DirectionsResponse>
 
 }

@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("kotlin-android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -57,6 +59,7 @@ dependencies {
     implementation ("com.google.android.gms:play-services-maps:18.2.0")
     implementation ("com.google.android.gms:play-services-location:21.1.0")
     implementation ("com.google.android.libraries.places:places:3.3.0")
+    implementation ("com.google.maps.android:android-maps-utils:2.2.5")
 
     implementation("com.squareup.picasso:picasso:2.71828")
 }

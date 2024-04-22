@@ -2,5 +2,6 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$/Fix-Fast-Buddy" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/Fix-Fast-Buddy/FixFastBuddy2" vcs="Git" />
   </component>
 </project>
