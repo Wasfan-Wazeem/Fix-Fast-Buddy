@@ -22,6 +22,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.auth.FirebaseAuth
 import com.wasfan.fixfastbuddy.dataClasses.ServicesDataClass
+import com.wasfan.fixfastbuddy.dataClasses.Vehicles
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,6 +35,7 @@ class HomeFragment : Fragment() {
     private lateinit var imageList : ArrayList<Int>
     private lateinit var vehicleList : ArrayList<String>
     private lateinit var licensePlateNoList : ArrayList<String>
+    private lateinit var vehicleIdList : ArrayList<String>
     private lateinit var adapter: VehicleImageAdapter
 
     private lateinit var recyclerView: RecyclerView
@@ -100,12 +102,14 @@ class HomeFragment : Fragment() {
                     imageList = ArrayList()
                     vehicleList = ArrayList()
                     licensePlateNoList = ArrayList()
+                    vehicleIdList = ArrayList()
 
                     if (vehicleListDB != null) {
                         for (vehicle in vehicleListDB) {
                             vehicleList.add("${vehicle.make} ${vehicle.model} ${vehicle.year}")
                             imageList.add(R.drawable.bmw)
                             licensePlateNoList.add(vehicle.licensePlateNo)
+                            vehicleIdList.add(vehicle.vehicleId.toString())
                         }
                     }
 
@@ -277,11 +281,12 @@ class HomeFragment : Fragment() {
         servicesAdapter.setOnItemClickListener(object : ServicesAdapterClass.onItemClickListener{
             override fun onItemClick(position: Int) {
                 val intent = Intent(context, MapsActivity::class.java)
+                intent.putExtra("vehicleId", vehicleIdList[viewPager2.currentItem])
                 intent.putExtra("vehicleName", vehicleList[viewPager2.currentItem])
                 intent.putExtra("vehicleImage", imageList[viewPager2.currentItem])
+                intent.putExtra("licensePlateNo", licensePlateNoList[viewPager2.currentItem])
                 intent.putExtra("serviceName", servicesList[position].servicesName)
                 intent.putExtra("serviceImage", servicesList[position].servicesImage)
-                intent.putExtra("licensePlateNo", licensePlateNoList[viewPager2.currentItem])
                 startActivity(intent)
             }
         })

@@ -61,6 +61,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var serviceImageSIV: ShapeableImageView
     private lateinit var currentLocationSBtn: ShapeableImageView
 
+    private lateinit var vehicleId: String
     private lateinit var vehicleName: String
 
     private var mGoogleMap: GoogleMap? = null
@@ -142,7 +143,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 var latitude = "${lastLocationLatLng?.latitude}"
                 var longitude = "${lastLocationLatLng?.longitude}"
 
-                sendServiceRequest("101", phoneNumber, latitude, longitude, formattedDate, formattedTime, vehicleName, userAddress)
+                sendServiceRequest("101", phoneNumber, latitude, longitude, formattedDate, formattedTime, vehicleName, userAddress, vehicleId)
 
                 startAcceptingServiceRequests(phoneNumber)
                 showLoadingDialog()
@@ -159,7 +160,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         CoroutineScope(Dispatchers.IO).launch {
             while (isRunning) {
                 acceptServiceRequest(userPhoneNumber)
-                delay(5000) // Delay for 5 seconds before the next check
+                delay(2500) // Delay for 2.5 seconds before the next check
             }
         }
     }
@@ -176,10 +177,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                     if(it.status == "Accepted"){
                         withContext(Dispatchers.Main) {
                             isRunning = false
-                            println(it)
-                            val intent = Intent(this@MapsActivity, OngoingService::class.java).apply {
-                                putExtra("requestData", it)
-                            }
+                            Manager.onGoing = true
+                            Manager.onGoingRequestId = it.requestId
+                            val intent = Intent(this@MapsActivity, OngoingService::class.java)
                             startActivity(intent)
                             finish()
                         }
@@ -220,8 +220,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         cancelButton.setOnClickListener {
             // Handle cancel button click
             isRunning = false
-            cancelServiceRequest(phoneNumber)
-            cancelLoadingDialog()
+            cancelSearching(phoneNumber)
+            loadingDialog?.dismiss()
         }
 
         val loadingImageView = view.findViewById<ImageView>(R.id.loadingImage)
@@ -237,14 +237,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         loadingDialog?.show()
     }
 
-    private fun cancelLoadingDialog() {
-        loadingDialog?.dismiss()
-        // Add your cancellation logic here
-    }
-
-    private fun sendServiceRequest(serviceID: String, userPhoneNumber: String, latitude: String, longitude: String, date: String, time: String, vehicleName: String, address:String?) {
+    private fun sendServiceRequest(serviceID: String, userPhoneNumber: String, latitude: String, longitude: String, date: String, time: String, vehicleName: String, address:String?, vehicleId: String) {
         val apiService = RetrofitInstance.api
-        val call = apiService.submitServiceRequest(serviceID, userPhoneNumber, latitude, longitude, date, time, vehicleName, address)
+        val call = apiService.submitServiceRequest(serviceID, userPhoneNumber, latitude, longitude, date, time, vehicleName, address, vehicleId)
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -268,9 +263,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         })
     }
 
-    private fun cancelServiceRequest(userPhoneNumber: String) {
+    private fun cancelSearching(userPhoneNumber: String) {
         val apiService = RetrofitInstance.api
-        val call = apiService.cancelServiceRequest(userPhoneNumber)
+        val call = apiService.cancelSearching(userPhoneNumber)
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -295,6 +290,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     private fun init() {
+        vehicleId = intent.getStringExtra("vehicleId")!!
         vehicleName = intent.getStringExtra("vehicleName")!!
         val vehicleImage: Int = intent.getIntExtra("vehicleImage", 0)!!
         val serviceName: String = intent.getStringExtra("serviceName")!!

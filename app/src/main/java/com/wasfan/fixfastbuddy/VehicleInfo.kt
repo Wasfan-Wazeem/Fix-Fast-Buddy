@@ -3,11 +3,6 @@ package com.wasfan.fixfastbuddy
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.provider.MediaStore
-import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -18,13 +13,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.auth.FirebaseAuth
+import com.wasfan.fixfastbuddy.dataClasses.Vehicles
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.FieldPosition
 import kotlin.properties.Delegates
 
 

@@ -25,7 +25,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout4"
         android:layout_width="330dp"
-        android:layout_height="385dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
         android:layout_marginTop="200dp"
 
         android:background="@drawable/border_radius_35dp"
@@ -35,7 +36,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/mechanicName"
+            android:id="@+id/mechanicNameTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
@@ -49,7 +50,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/mechanicCompany"
+            android:id="@+id/garageNameTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="69dp"
@@ -82,7 +83,7 @@
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:numStars="5"
             android:progressTint="@color/gold"
             android:rating="3.5"
@@ -96,7 +97,7 @@
             android:id="@+id/reviewET"
             android:layout_width="290dp"
             android:layout_height="130dp"
-            android:layout_marginTop="190dp"
+            android:layout_marginTop="5dp"
             android:background="@drawable/_10dp_border_radius_bg"
             android:backgroundTint="@color/pallete_4"
             android:gravity="top|start"
@@ -108,13 +109,13 @@
             android:paddingHorizontal="15dp"
             android:paddingVertical="8dp"
             android:scrollbars="vertical"
-            android:textColorHint="#DBE2EF"
             android:textColor="@color/white"
+            android:textColorHint="#DBE2EF"
             android:textSize="13sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
         <Button
             android:id="@+id/submitBTN"

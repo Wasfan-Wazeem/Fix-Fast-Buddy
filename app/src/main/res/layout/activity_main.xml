@@ -8,11 +8,11 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/signOutBtn"
+        android:id="@+id/popupBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="350dp"
-        android:text="Sign Out"
+        android:text="Pop Up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

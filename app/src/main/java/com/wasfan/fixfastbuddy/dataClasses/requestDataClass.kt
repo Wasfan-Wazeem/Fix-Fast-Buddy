@@ -16,16 +16,17 @@ data class requestDataClass(
     val userLatitude: Double,
     val userLongitude: Double,
     val mechanicInitialAddress: String?,
-    val review: String?,
-    val rating: String?,
+    var review: String?,
+    var rating: Float?,
     val distance: Double,
     val inspectionCost: String,
     val travellingCost: String,
     val firstName: String,
     val lastName: String,
-    val latitude: String,
-    val longitude: String,
+    var latitude: Double,
+    var longitude: Double,
     val profileImagePath: String?,
     val vehicleName: String,
-    val type: String
+    val type: String,
+    var cancelledReason: String?
 ): Parcelable

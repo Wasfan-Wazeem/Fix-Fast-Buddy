@@ -1,7 +1,10 @@
 package com.wasfan.fixfastbuddy
 
 
+import com.wasfan.fixfastbuddy.dataClasses.CheckStatusDataClass
 import com.wasfan.fixfastbuddy.dataClasses.DirectionsResponse
+import com.wasfan.fixfastbuddy.dataClasses.Vehicles
+import com.wasfan.fixfastbuddy.dataClasses.fetchLocationDataClass
 import com.wasfan.fixfastbuddy.dataClasses.requestDataClass
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -90,7 +93,8 @@ interface RetrofitAPI {
         @Field("date") date: String,
         @Field("time") time: String,
         @Field("vehicleName") vehicleName: String,
-        @Field("userAddress") userAddress: String?
+        @Field("userAddress") userAddress: String?,
+        @Field("vehicleId") vehicleId: String
     ): Call<ResponseBody>
 
     @FormUrlEncoded
@@ -100,8 +104,8 @@ interface RetrofitAPI {
     ): Call<requestDataClass>
 
     @FormUrlEncoded
-    @POST("CancelRequest.php")
-    fun cancelServiceRequest(
+    @POST("CancelSearching.php")
+    fun cancelSearching(
         @Field("userPhoneNumber") userPhoneNumber: String,
     ): Call<ResponseBody>
 
@@ -113,4 +117,47 @@ interface RetrofitAPI {
         @Query("key") apiKey: String
     ): Call<DirectionsResponse>
 
+    @FormUrlEncoded
+    @POST("FetchMechanicLocation.php")
+    fun fetchMechanicLocation(
+        @Field("mechanicPhoneNumber") mechanicPhoneNumber: String?
+    ): Call<fetchLocationDataClass>
+
+    @FormUrlEncoded
+    @POST("FetchRequestDetails.php")
+    fun fetchRequestDetails(
+        @Field("requestId") requestId: String
+    ): Call<requestDataClass>
+
+    @GET("CheckServiceStatus.php")
+    fun checkServiceStatus(
+        @Query("requestId") requestId: String
+    ): Call<CheckStatusDataClass>
+
+    @GET("UpdateServiceStatus.php")
+    fun updateServiceStatus(
+        @Query("requestId") requestId: String,
+        @Query("statusData") statusData: String
+    ): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("UpdateRatingAndReview.php")
+    fun updateRatingAndReview(
+        @Field("requestId") requestId: String,
+        @Field("rating") rating: Float,
+        @Field("review") review: String
+    ): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("FetchRequestDetailsRequestId.php")
+    fun fetchRequestDetailsRequestId(
+        @Field("requestId") requestId: String
+    ): Call<requestDataClass>
+
+    @FormUrlEncoded
+    @POST("CancelServiceRequest.php")
+    fun cancelServiceRequest(
+        @Field("requestId") requestId: String,
+        @Field("cancelledReason") cancelledReason: String
+    ): Call<ResponseBody>
 }
