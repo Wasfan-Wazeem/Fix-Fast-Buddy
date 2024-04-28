@@ -19,8 +19,9 @@ data class requestDataClass(
     var review: String?,
     var rating: Float?,
     val distance: Double,
-    val inspectionCost: String,
-    val travellingCost: String,
+    val inspectionCost: Double,
+    val travellingCost: Double,
+    val totalCost: Double,
     val firstName: String,
     val lastName: String,
     var latitude: Double,
@@ -28,5 +29,6 @@ data class requestDataClass(
     val profileImagePath: String?,
     val vehicleName: String,
     val type: String,
-    var cancelledReason: String?
+    var cancelledReason: String?,
+    var description: String
 ): Parcelable

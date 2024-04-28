@@ -2,5 +2,6 @@ package com.wasfan.fixfastbuddy.dataClasses
 
 data class ServicesDataClass(
     val servicesImage: Int,
-    val servicesName: String
+    val servicesName: String,
+    val serviceId: String
 )

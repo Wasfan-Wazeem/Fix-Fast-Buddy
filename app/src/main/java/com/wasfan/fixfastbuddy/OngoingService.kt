@@ -67,6 +67,9 @@ class OngoingService : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var vehicleNameTV: TextView
     private lateinit var vehicleLicensePlateNoTV: TextView
     private lateinit var serviceTV: TextView
+    private lateinit var descriptionTV: TextView
+    private lateinit var problemTV: TextView
+    private lateinit var serviceChargeTV: TextView
     private lateinit var inspectionCostTV: TextView
     private lateinit var travellingCostTV: TextView
     private lateinit var totalCostTV: TextView
@@ -151,6 +154,8 @@ class OngoingService : AppCompatActivity(), OnMapReadyCallback {
                             "Service Charged" -> {
                                 if (::serviceChargeData.isInitialized) { // Check if serviceChargeData has been initialized
                                     showChargesDialog()
+                                    problemTV.text = serviceChargeData.problem
+                                    serviceChargeTV.text = serviceChargeData.serviceCharge
                                 }
                             }
 
@@ -212,9 +217,9 @@ class OngoingService : AppCompatActivity(), OnMapReadyCallback {
         // Set the text for problem and costs, you can change these to dynamic values
         dialog.findViewById<TextView>(R.id.problemTV).text = serviceChargeData.problem
         dialog.findViewById<TextView>(R.id.serviceTV).text = serviceChargeData.serviceId
-        dialog.findViewById<TextView>(R.id.inspectionCostTV).text = serviceChargeData.inspectionCost
-        dialog.findViewById<TextView>(R.id.travellingCostTV).text = serviceChargeData.travellingCost
-        dialog.findViewById<TextView>(R.id.totalCostTV).text = serviceChargeData.totalCost
+        dialog.findViewById<TextView>(R.id.inspectionCostTV).text = "Rs.${serviceChargeData.inspectionCost}"
+        dialog.findViewById<TextView>(R.id.travellingCostTV).text = "Rs.${serviceChargeData.travellingCost}"
+        dialog.findViewById<TextView>(R.id.totalCostTV).text = "Rs.${serviceChargeData.totalCost}"
 
         // Set the listeners for the accept and decline buttons
         dialog.findViewById<Button>(R.id.acceptButton).setOnClickListener {
@@ -227,7 +232,7 @@ class OngoingService : AppCompatActivity(), OnMapReadyCallback {
         }
         dialog.findViewById<Button>(R.id.declineButton).setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                updateServiceStatus(requestData.requestId, "Declined")
+                updateServiceStatus(requestData.requestId, "Decline")
                 withContext(Dispatchers.Main) {
                     dialog.dismiss()
                 }
@@ -502,6 +507,9 @@ class OngoingService : AppCompatActivity(), OnMapReadyCallback {
         vehicleNameTV = findViewById(R.id.vehicleName)
         vehicleLicensePlateNoTV = findViewById(R.id.vehicleLicensePlateNoTV)
         serviceTV = findViewById(R.id.serviceTV)
+        descriptionTV= findViewById(R.id.descriptionTV)
+        problemTV= findViewById(R.id.problemTV)
+        serviceChargeTV= findViewById(R.id.serviceChargeTV)
         inspectionCostTV = findViewById(R.id.inspectionCostTV)
         travellingCostTV = findViewById(R.id.travellingCostTV)
         totalCostTV = findViewById(R.id.totalCostTV)
@@ -517,22 +525,13 @@ class OngoingService : AppCompatActivity(), OnMapReadyCallback {
         }
         nameTV.text = "${requestData.firstName} ${requestData.lastName}"
         vehicleNameTV.text = requestData.vehicleName
-        inspectionCostTV.text = requestData.inspectionCost
-        travellingCostTV.text = requestData.travellingCost
+        inspectionCostTV.text = "${requestData.inspectionCost}"
+        travellingCostTV.text = "${requestData.travellingCost}"
         serviceTV.text = requestData.type
-
-        val totalCost = calculateTotal(requestData.inspectionCost, requestData.travellingCost)
-        totalCostTV.text = totalCost
-    }
-
-    private fun calculateTotal(inspectionCost: String?, travellingCost: String?): String {
-        fun extractNumber(cost: String?): Double {
-            return cost?.removePrefix("Rs.")?.toDouble() ?: 0.0
+        if(requestData.description != null) {
+            descriptionTV.text = requestData.description
         }
-
-        val total = extractNumber(inspectionCost) + extractNumber(travellingCost)
-
-        return "Rs.%.2f".format(total)
+        totalCostTV.text = "Rs.${requestData.totalCost}"
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

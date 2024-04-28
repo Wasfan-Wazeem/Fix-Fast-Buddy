@@ -3,6 +3,7 @@ package com.wasfan.fixfastbuddy
 
 import com.wasfan.fixfastbuddy.dataClasses.CheckStatusDataClass
 import com.wasfan.fixfastbuddy.dataClasses.DirectionsResponse
+import com.wasfan.fixfastbuddy.dataClasses.FetchCancelledDataClass
 import com.wasfan.fixfastbuddy.dataClasses.Vehicles
 import com.wasfan.fixfastbuddy.dataClasses.fetchLocationDataClass
 import com.wasfan.fixfastbuddy.dataClasses.requestDataClass
@@ -94,7 +95,8 @@ interface RetrofitAPI {
         @Field("time") time: String,
         @Field("vehicleName") vehicleName: String,
         @Field("userAddress") userAddress: String?,
-        @Field("vehicleId") vehicleId: String
+        @Field("vehicleId") vehicleId: String,
+        @Field("description") description: String?
     ): Call<ResponseBody>
 
     @FormUrlEncoded
@@ -160,4 +162,16 @@ interface RetrofitAPI {
         @Field("requestId") requestId: String,
         @Field("cancelledReason") cancelledReason: String
     ): Call<ResponseBody>
+
+    @FormUrlEncoded
+    @POST("FetchCancelledRequests.php")
+    fun fetchCancelledRequests(
+        @Field("phoneNumber") phoneNumber: String,
+    ): Call<List<FetchCancelledDataClass>>
+
+    @FormUrlEncoded
+    @POST("FetchCompletedRequests.php")
+    fun fetchCompletedRequests(
+        @Field("phoneNumber") phoneNumber: String,
+    ): Call<List<FetchCancelledDataClass>>
 }

@@ -7,5 +7,6 @@ data class CheckStatusDataClass(
     val inspectionCost:String,
     val travellingCost: String,
     val totalCost: String,
-    val cancelledReason: String
+    val cancelledReason: String,
+    val serviceCharge: String
 )

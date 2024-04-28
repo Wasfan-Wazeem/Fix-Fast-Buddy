@@ -100,7 +100,7 @@
                 android:id="@+id/vehicleNameTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="9dp"
                 android:text="BMW 318i 2022"
                 android:textSize="15sp"
                 android:textStyle="bold"
@@ -120,6 +120,16 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/vehicleNameTV" />
+
+            <TextView
+                android:id="@+id/descriptionVal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/serviceNameTV" />
 
             <View
                 android:id="@+id/view3"

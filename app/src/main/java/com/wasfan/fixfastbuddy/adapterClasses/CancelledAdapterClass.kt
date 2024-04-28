@@ -1,4 +1,4 @@
-package com.wasfan.fixfastbuddy
+package com.wasfan.fixfastbuddy.adapterClasses
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,19 +6,21 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.wasfan.fixfastbuddy.CompletedDataClass
+import com.wasfan.fixfastbuddy.R
 
-class CompletedAdapterClass(private val dataList: ArrayList<CompletedDataClass>) :
-    RecyclerView.Adapter<CompletedAdapterClass.ViewHolderClass>() {
+class CancelledAdapterClass (private val dataList: ArrayList<CompletedDataClass>) :
+    RecyclerView.Adapter<CancelledAdapterClass.ViewHolderClass>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderClass {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.completed_items, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.cancelled_items, parent, false)
         return ViewHolderClass(itemView)
     }
 
     override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
         val currentItem = dataList[position]
-        holder.rvImage.setImageResource(currentItem.image!!)
+        //holder.rvImage.setImageResource(currentItem.image!!)
         holder.rvServiceID.text = currentItem.serviceID
         holder.rvServiceType.text = currentItem.serviceType
         holder.rvVehicleNum.text = currentItem.vehicleNum
@@ -26,7 +28,6 @@ class CompletedAdapterClass(private val dataList: ArrayList<CompletedDataClass>)
         holder.rvDate.text = currentItem.date
         holder.rvTime.text = currentItem.time
         holder.rvCompletedAmount.text = currentItem.completedAmount
-
     }
 
     override fun getItemCount(): Int {

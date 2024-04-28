@@ -58,11 +58,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var vehicleNameTV: TextView
     private lateinit var licensePlateNoTV: TextView
     private lateinit var serviceNameTV: TextView
+    private lateinit var descriptionValTV: TextView
     private lateinit var serviceImageSIV: ShapeableImageView
     private lateinit var currentLocationSBtn: ShapeableImageView
 
     private lateinit var vehicleId: String
     private lateinit var vehicleName: String
+    private var description: String? = null
 
     private var mGoogleMap: GoogleMap? = null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -143,7 +145,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 var latitude = "${lastLocationLatLng?.latitude}"
                 var longitude = "${lastLocationLatLng?.longitude}"
 
-                sendServiceRequest("101", phoneNumber, latitude, longitude, formattedDate, formattedTime, vehicleName, userAddress, vehicleId)
+                sendServiceRequest("101", phoneNumber, latitude, longitude, formattedDate, formattedTime, vehicleName, userAddress, vehicleId, description)
 
                 startAcceptingServiceRequests(phoneNumber)
                 showLoadingDialog()
@@ -237,9 +239,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         loadingDialog?.show()
     }
 
-    private fun sendServiceRequest(serviceID: String, userPhoneNumber: String, latitude: String, longitude: String, date: String, time: String, vehicleName: String, address:String?, vehicleId: String) {
+    private fun sendServiceRequest(serviceID: String, userPhoneNumber: String, latitude: String, longitude: String, date: String, time: String, vehicleName: String, address:String?, vehicleId: String, description: String?) {
         val apiService = RetrofitInstance.api
-        val call = apiService.submitServiceRequest(serviceID, userPhoneNumber, latitude, longitude, date, time, vehicleName, address, vehicleId)
+        val call = apiService.submitServiceRequest(serviceID, userPhoneNumber, latitude, longitude, date, time, vehicleName, address, vehicleId, description)
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -296,6 +298,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         val serviceName: String = intent.getStringExtra("serviceName")!!
         val serviceImage: Int = intent.getIntExtra("serviceImage", 0)!!
         val licensePlateNo: String = intent.getStringExtra("licensePlateNo")!!
+        description = intent.getStringExtra("description")
 
         backBtn = findViewById(R.id.back_button)
         confirmBtn = findViewById(R.id.confirmBtn)
@@ -303,6 +306,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         vehicleImageSIV = findViewById(R.id.vehicleImageSIV)
         serviceNameTV = findViewById(R.id.serviceNameTV)
         serviceImageSIV = findViewById(R.id.serviceSIV)
+        descriptionValTV = findViewById(R.id.descriptionVal)
         licensePlateNoTV = findViewById(R.id.vehicleLicensePLNoTV)
         currentLocationSBtn = findViewById(R.id.currentLocationSBtn)
 
@@ -311,8 +315,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         licensePlateNoTV.text = licensePlateNo
         vehicleImageSIV.setImageResource(vehicleImage)
         serviceImageSIV.setImageResource(serviceImage)
-
-
+        if(description != null || description == description) {
+            descriptionValTV.text = description
+        }
     }
 
     private fun addMarker(latLng: LatLng) {
