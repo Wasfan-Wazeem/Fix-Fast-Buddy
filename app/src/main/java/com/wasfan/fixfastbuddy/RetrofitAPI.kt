@@ -174,4 +174,10 @@ interface RetrofitAPI {
     fun fetchCompletedRequests(
         @Field("phoneNumber") phoneNumber: String,
     ): Call<List<FetchCancelledDataClass>>
+
+    @FormUrlEncoded
+    @POST("FetchOngoingRequest.php")
+    fun fetchOngoingRequest(
+        @Field("phoneNumber") phoneNumber: String,
+    ): Call<List<FetchCancelledDataClass>>
 }

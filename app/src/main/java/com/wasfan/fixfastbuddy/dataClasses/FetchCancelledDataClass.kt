@@ -9,5 +9,8 @@ class FetchCancelledDataClass (
     val userInitialAddress: String,
     val date: String,
     val time: String,
-    val totalAmount: String?
+    val totalAmount: String?,
+    val status: String?,
+    val mechanicPhoneNumber: String?,
+    val rating: Float?
 )

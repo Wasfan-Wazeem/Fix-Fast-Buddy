@@ -26,6 +26,7 @@ class RatingAndReview : AppCompatActivity() {
     private lateinit var mechanicNameTV: TextView
     private lateinit var garageNameTV: TextView
     private lateinit var reviewET: EditText
+    private lateinit var skipTV: TextView
 
     private lateinit var requestId: String
     private lateinit var requestData: requestDataClass
@@ -43,10 +44,23 @@ class RatingAndReview : AppCompatActivity() {
         setupRatingBar()
 
         submitBTN.setOnClickListener {
-            requestData.review = reviewET.text.toString()
-            CoroutineScope(Dispatchers.IO).launch {
-                updateRatingAndReview(requestId, requestData.rating!!, requestData.review!!)
+            if (reviewET.text.isEmpty()) {
+                Toast.makeText(this@RatingAndReview, "Please enter a review", Toast.LENGTH_LONG)
+                    .show()
+            } else if (requestData.rating == null) {
+                Toast.makeText(this@RatingAndReview, "Please give a rating", Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                requestData.review = reviewET.text.toString()
+                CoroutineScope(Dispatchers.IO).launch {
+                    updateRatingAndReview(requestId, requestData.rating!!, requestData.review!!)
+                }
             }
+        }
+
+        skipTV.setOnClickListener {
+            startActivity(Intent(this@RatingAndReview, Navigation::class.java))
+            finish()
         }
     }
 
@@ -121,11 +135,7 @@ class RatingAndReview : AppCompatActivity() {
     private fun setupRatingBar() {
         ratingBar.onRatingBarChangeListener = RatingBar.OnRatingBarChangeListener { _, rating, _ ->
             requestData.rating = rating
-            Toast.makeText(
-                this@RatingAndReview,
-                "Rating: ${requestData.rating}",
-                Toast.LENGTH_SHORT
-            ).show()
+
         }
     }
 
@@ -136,6 +146,7 @@ class RatingAndReview : AppCompatActivity() {
         mechanicNameTV = findViewById(R.id.mechanicNameTV)
         garageNameTV = findViewById(R.id.garageNameTV)
         reviewET = findViewById(R.id.reviewET)
+        skipTV = findViewById(R.id.skipTV)
     }
 
     private fun updateUI() {

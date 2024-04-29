@@ -20,7 +20,7 @@ data class requestDataClass(
     var rating: Float?,
     val distance: Double,
     val inspectionCost: Double,
-    val travellingCost: Double,
+    val travellingCost: Double?,
     val totalCost: Double,
     val firstName: String,
     val lastName: String,
@@ -30,5 +30,5 @@ data class requestDataClass(
     val vehicleName: String,
     val type: String,
     var cancelledReason: String?,
-    var description: String
+    var description: String?
 ): Parcelable

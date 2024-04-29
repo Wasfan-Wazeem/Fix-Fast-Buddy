@@ -200,9 +200,9 @@ class OngoingService : AppCompatActivity(), OnMapReadyCallback {
         dialog.findViewById<Button>(R.id.homeButton).setOnClickListener {
             Manager.onGoing = false
             Manager.onGoingRequestId = null
+            dialog.dismiss()
             startActivity(Intent(this@OngoingService, Navigation::class.java))
             finish()
-            dialog.dismiss()
         }
         dialog.show()
     }
@@ -285,7 +285,7 @@ class OngoingService : AppCompatActivity(), OnMapReadyCallback {
                     cancelServiceRequest(requestData.requestId, requestData.cancelledReason!!)
                 }
             }
-
+            dialog.dismiss()
         }
 
         dialog.show()
@@ -525,13 +525,14 @@ class OngoingService : AppCompatActivity(), OnMapReadyCallback {
         }
         nameTV.text = "${requestData.firstName} ${requestData.lastName}"
         vehicleNameTV.text = requestData.vehicleName
-        inspectionCostTV.text = "${requestData.inspectionCost}"
-        travellingCostTV.text = "${requestData.travellingCost}"
+        inspectionCostTV.text = "Rs.${requestData.inspectionCost}"
+        travellingCostTV.text = "Rs.${requestData.travellingCost}"
         serviceTV.text = requestData.type
         if(requestData.description != null) {
             descriptionTV.text = requestData.description
         }
-        totalCostTV.text = "Rs.${requestData.totalCost}"
+        val totalCost = requestData.inspectionCost + requestData.travellingCost!!
+        totalCostTV.text = "Rs.$totalCost"
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

@@ -65,6 +65,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var vehicleId: String
     private lateinit var vehicleName: String
     private var description: String? = null
+    private lateinit var serviceId: String
 
     private var mGoogleMap: GoogleMap? = null
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -145,9 +146,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 var latitude = "${lastLocationLatLng?.latitude}"
                 var longitude = "${lastLocationLatLng?.longitude}"
 
-                sendServiceRequest("101", phoneNumber, latitude, longitude, formattedDate, formattedTime, vehicleName, userAddress, vehicleId, description)
+                sendServiceRequest(serviceId, phoneNumber, latitude, longitude, formattedDate, formattedTime, vehicleName, userAddress, vehicleId, description)
 
-                startAcceptingServiceRequests(phoneNumber)
+                startCheckingRequestStatus(phoneNumber)
                 showLoadingDialog()
             }
         }
@@ -158,16 +159,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     }
 
-    private fun startAcceptingServiceRequests(userPhoneNumber: String) {
+    private fun startCheckingRequestStatus(userPhoneNumber: String) {
         CoroutineScope(Dispatchers.IO).launch {
             while (isRunning) {
-                acceptServiceRequest(userPhoneNumber)
-                delay(2500) // Delay for 2.5 seconds before the next check
+                checkRequestStatus(userPhoneNumber)
+                delay(3000) // Delay for 2.5 seconds before the next check
             }
         }
     }
 
-    private suspend fun acceptServiceRequest(userPhoneNumber: String) {
+    private suspend fun checkRequestStatus(userPhoneNumber: String) {
         val retrofitAPI = RetrofitInstance.api
         val call: Call<requestDataClass> = retrofitAPI.checkRequestStatus(userPhoneNumber)
 
@@ -298,6 +299,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         val serviceName: String = intent.getStringExtra("serviceName")!!
         val serviceImage: Int = intent.getIntExtra("serviceImage", 0)!!
         val licensePlateNo: String = intent.getStringExtra("licensePlateNo")!!
+        serviceId = intent.getStringExtra("serviceId")!!
         description = intent.getStringExtra("description")
 
         backBtn = findViewById(R.id.back_button)

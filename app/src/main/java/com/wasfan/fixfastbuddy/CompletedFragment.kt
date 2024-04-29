@@ -1,5 +1,6 @@
 package com.wasfan.fixfastbuddy
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,7 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.wasfan.fixfastbuddy.adapterClasses.CancelledAdapterClass
+import com.wasfan.fixfastbuddy.adapterClasses.CompletedAdapterClass
 import com.wasfan.fixfastbuddy.dataClasses.FetchCancelledDataClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,6 +30,8 @@ class CompletedFragment : Fragment() {
     private lateinit var date: Array<String>
     private lateinit var time: Array<String>
     private lateinit var completedAmount: Array<String?>
+    private lateinit var rating: Array<Float?>
+    private lateinit var requestId: Array<String>
 
     private val currentUser = FirebaseAuth.getInstance().currentUser
     val phoneNumber = currentUser?.phoneNumber.toString()
@@ -70,6 +73,8 @@ class CompletedFragment : Fragment() {
                             date = data.map { it.date }.toTypedArray()
                             time = data.map { it.time }.toTypedArray()
                             completedAmount = data.map { it.totalAmount }.toTypedArray()
+                            rating = data.map { it.rating }.toTypedArray()
+                            requestId = data.map { it.requestId }.toTypedArray()
 
                             withContext(Dispatchers.Main) {
                                 recyclerView()
@@ -86,6 +91,21 @@ class CompletedFragment : Fragment() {
     }
 
     private fun recyclerView() {
+        val onRatingClickListener = object : (Int) -> Unit {
+            override fun invoke(position: Int) {
+                val intent = Intent(requireContext(), RatingAndReview::class.java).apply {
+                    putExtra("requestId", requestId[position])
+                }
+                startActivity(intent)
+            }
+        }
+
+        val completedDetailsTV = object : (Int) -> Unit {
+            override fun invoke(position: Int) {
+
+            }
+        }
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
@@ -103,7 +123,7 @@ class CompletedFragment : Fragment() {
             )
             dataList.add(dataClass)
         }
-        recyclerView.adapter = CancelledAdapterClass(dataList)
+        recyclerView.adapter = CompletedAdapterClass(dataList, onRatingClickListener, completedDetailsTV)
     }
 
 }
